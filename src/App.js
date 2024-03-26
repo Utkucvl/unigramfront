@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RegisterPage from "../src/components/auth/RegisterPage";
+import LoginPage from "../src/components/auth/LoginPage";
+import ProtectedRoute from "../src/components/api/ProtectedRoute";
+import Dashboard from "./components/dashboard/Dashboard";
+import LeftMenu from "../src/components/nav/LeftMenu";
+import { Layout } from "antd";
+import AnnouncementList from "./components/announcement/AnnouncementList";
+import ActivityList from "./components/activity/ActivityList";
+
+const { Sider, Content } = Layout;
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Sider width={256} style={{ background: "#fff" }}>
+                  <LeftMenu />
+                </Sider>
+                <Layout>
+                  <Content>
+                    <AnnouncementList />
+                  </Content>
+                </Layout>
+              </Layout>
+            }
+          ></Route>
+          <Route
+            path="/activity"
+            element={
+              <Layout>
+                <Sider width={256} style={{ background: "#fff" }}>
+                  <LeftMenu />
+                </Sider>
+                <Layout>
+                  <Content>
+                    <ActivityList />
+                  </Content>
+                </Layout>
+              </Layout>
+            }
+          ></Route>
+          <Route path="/signup" element={<RegisterPage />} />
+          <Route path="/signin" element={<LoginPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
