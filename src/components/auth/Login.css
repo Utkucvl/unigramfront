@@ -1,0 +1,20 @@
+.cover {
+    background-color: rgb(224, 224, 224);
+    display: flex;
+    height: 90%; /* Sayfanın tamamını kaplayacak şekilde ayarlayın */
+    overflow: hidden; /* Gerekliyse içerik taşmalarını önler */
+    margin: 100px;
+  }
+  
+  .Top {
+    
+    background-image: url("photo.png");
+    background-size: cover;
+    z-index: -1;
+    height: 100vh;
+    flex: 1; /* Tüm alanı kaplamak için */
+    display: flex;
+    justify-content: center; /* İçeriği yatayda ortalar */
+    align-items: center; /* İçeriği dikeyde ortalar */
+    
+  }

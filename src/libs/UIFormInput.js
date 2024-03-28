@@ -22,7 +22,7 @@ const styles = {
   },
   formItem: {
     marginBottom: 24,
-    width: "400px",
+    width: "300px",
   },
 };
 

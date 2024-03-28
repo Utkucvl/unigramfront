@@ -8,7 +8,7 @@ import LeftMenu from "../src/components/nav/LeftMenu";
 import { Layout } from "antd";
 import AnnouncementList from "./components/announcement/AnnouncementList";
 import ActivityList from "./components/activity/ActivityList";
-
+import './App.css';
 const { Sider, Content } = Layout;
 
 function App() {
