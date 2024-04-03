@@ -17,7 +17,6 @@ import img1 from './resim1.png'
 import nar from './nar.png'
 
 
-
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -76,7 +75,7 @@ function LoginPage() {
         <div style={{ flex: "1", textAlign: "center", backgroundColor: "rgba(255,255,255,255)" }}>
           <div style={{ textAlign: "center", marginBottom: "20px" }}>
             <img
-              style={{ width: "30%", height: "30%", marginTop: "0px" }}
+              style={{ width: "12%", height: "12%", marginTop: "50px" }}
               src={nar}
               alt="AGU Logo"
             />
@@ -118,7 +117,7 @@ function LoginPage() {
             <Tooltip>
                 <Button
                   type="primary"
-                  style={{ width: "300px", backgroundColor: "rgba(9,9,99,255)" }}
+                  style={{ width: "300px", backgroundColor: "rgba(9,9,99,255)",color:"white" }}
                   htmlType="submit"
                 >
                   Log In
@@ -144,3 +143,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
