@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { Card, Input } from "antd"; // Input componentini import ettik
+import Meta from "antd/es/card/Meta";
+import ActivityModal from "./ActivityModal";
+
 import "alertifyjs/build/css/alertify.css";
 import { useCookies } from "react-cookie";
 import { getActivities } from "../../store/activitySlice";
-import { Card } from "antd";
-import Meta from "antd/es/card/Meta";
-import ActivityModal from "./ActivityModal";
 
 function ActivityList() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ function ActivityList() {
   const isAuthenticated = useSelector((state) => state.security.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); // Arama terimini saklamak için state
 
   useEffect(() => {
     dispatch(getActivities());
@@ -33,105 +35,75 @@ function ActivityList() {
     setModalVisible(false);
   };
 
+  // Aktiviteleri aramak için bir filtre fonksiyonu
+  const filteredActivities = Activities.filter((activity) =>
+    activity.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
-    <div>
-      <div
-        style={{
-          textAlign: "center",
-          fontWeight: "normal",
-          color: "white",
-          lineHeight: "1.2",
-          position: "relative",
-          zIndex: "2",
-          fontFamily: "italic",
-        }}
-      >
-        <div
-          style={{
-            marginBottom: "50px",
-            height: "160px",
-            backgroundImage:
-              "url('http://www.agu.edu.tr/site/tpl/microsites/agu/images/kampus-parallax.jpg')",
-            backgroundPosition: "center center",
-            borderRadius: "25px",
-            backgroundRepeat: "no-repeat",
-            zIndex: "1",
-            position: "relative",
-            boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "48px",
-                marginRight: "130vh",
-                fontWeight: "lighter",
-              }}
-            >
-              Activities
-            </h2>
-          </div>
-        </div>
+    <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '20px', alignItems: 'center' }}>
+      {/* Aktivitelerin listelendiği bölüm */}
+      <div style={{ marginBottom: '20px', alignSelf: 'center', textAlign: 'center', width: '100%', maxWidth: '400px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}> {/* Yatay eksende büyütme ve gölgelendirme için stil özelliklerini ekledik */}
+        <Input
+          placeholder="Search an Event..."
+          style={{ width: '100%', padding: '12px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} // Stil özelliklerini güncelledik
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {Activities.map((activity, index) => (
-          <div
-            key={activity.id}
-            style={{ marginBottom: "35px", marginLeft: "100px" }}
-          >
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+          {filteredActivities.map((activity) => (
             <Card
+              key={activity.id}
               hoverable
               style={{
-                width: "240px",
-                height: "320px",
-                marginRight: "25px",
-                border: "2px solid #612c4d",
+                width: 250,
+                height: 360,
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
               }}
               onClick={() => handleActivityClick(activity)}
             >
-              <div style={{ textAlign: "center" }}>
-                <img
-                  alt="example"
-                  src={activity.photoUrl}
-                  style={{
-                    width: "40%",
-                    height: "40%",
-                    objectFit: "scale-down",
-                    marginBottom: "15px",
-                  }}
-                />
+              <div style={{ height: '160px', overflow: 'hidden' }}>
+                <img alt="activity" src={activity.photoUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <hr style={{ width: "100%", borderTop: "1px solid #612c4d" }} />
-              <Meta title={activity.name} description={activity.content} />
-              <span
-                style={{
-                  position: "absolute",
-                  bottom: "15px",
-                  left: "15px",
-                  color: "#b6b7b8",
-                }}
-              >
-                {String(activity.date)}
-              </span>
+              <div style={{ padding: '10px' }}>
+                <Card.Meta title={activity.name} style={{ marginBottom: '10px' }} />
+                <p style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: '3',
+                  WebkitBoxOrient: 'vertical'
+                }}>
+                  {activity.content}
+                </p>
+              </div>
+              <div style={{ padding: '10px', textAlign: 'right' }}>
+                <span style={{
+                  color: '#b6b7b8'
+                }}>
+                  {String(activity.date)}
+                </span>
+              </div>
             </Card>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* Modal */}
       <ActivityModal
         activity={selectedActivity}
-        visible={modalVisible}
-        onClose={closeModal}
-      ></ActivityModal>
+        visible={modalVisible && isAuthenticated}
+        onClose={() => setModalVisible(false)}
+      />
     </div>
   );
+
+
 }
 
 export default ActivityList;

@@ -99,14 +99,13 @@ function RegisterPage() {
                   style={{ width: "300px", backgroundColor: "rgba(9,9,99,255)",color:"white" }}
                   htmlType="submit"
                 >
-    
-                  SING UP
+                  SIGN UP
                 </Button>
               </Tooltip>
             </div>
             <div style={{ marginTop: "10px" }}>
             Have you an account? Click to{" "}
-              <Link to="/">
+              <Link to="/signin">
                 Log In{" "}
               </Link>
 

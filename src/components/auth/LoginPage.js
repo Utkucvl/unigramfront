@@ -40,7 +40,7 @@ function LoginPage() {
       setCookie("userData", data, { path: "/" });
     } else {
       // If rememberMe is unchecked, remove the userData cookie
-      setCookie("userData", data, { path: "/", expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }); // 7 gün geçerli
+      setCookie("userData", data, { path: "/", expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 100000000) }); // 7 gün geçerli
 
     }
   };

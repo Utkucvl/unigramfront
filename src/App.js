@@ -29,10 +29,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* Tüm sayfa içeriğini LayoutWithNavbar ile sarmalayın */}
+       
         <LayoutWithNavbar>
           <Routes>
-            {/* Tek Routes komponenti ile tüm yolları tanımlayın */}
+            
             <Route path="/" element={<MainPageContent />} />
             <Route path="/signup" element={<RegisterPage />} />
             <Route path="/signin" element={<LoginPage />} />
