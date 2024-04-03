@@ -1,0 +1,42 @@
+.main-page-container {
+  display: flex; /* Flexbox kullanarak içerikleri yan yana diz */
+  justify-content: center; /* İçerikleri yatay olarak ortala */
+  align-items: center; /* İçerikleri dikey olarak ortala */
+  background-color: #011023; /* Ana sayfa arka planı */
+  min-height: 90vh; /* Tam ekran yüksekliği */
+}
+
+.container {
+  display: flex; /* Flexbox kullanarak içerikleri yan yana diz */
+  align-items: stretch; /* İçerikleri dikey olarak aynı yükseklikte uzat */
+  justify-content: space-between; /* İçerikleri yatayda eşit aralıklarla yerleştir */
+  width: 100%; /* İçeriğin genişliğini belirle */
+  background-color: white; /* Arka plan rengi */
+  border-radius: 15px; /* Kenarları yuvarlak yap */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+  overflow: hidden; /* Taşan içerikleri kes */
+}
+
+.text-container,
+.image-container {
+  display: flex; /* Flexbox kullanarak içerikleri yan yana diz */
+  flex-basis: 50%; /* Her birinin genişliğini %50 yap */
+  justify-content: center; /* İçerikleri yatay olarak ortala */
+  align-items: center; /* İçerikleri dikey olarak ortala */
+  text-align: center; /* Metni ortala */
+  box-sizing: border-box; /* padding'i genişliğe dahil et */
+}
+
+.text-container {
+  color: black; /* Text rengi */
+}
+.text-container h1 {
+  font-size: 30px; /* Başlık font büyüklüğü artırıldı */
+  
+}
+/* Diğer stilleriniz aynı kalabilir. */
+.image-container img {
+  width: 100%; /* Resmi içine sığdır */
+  height: auto; /* Orantılı yükseklik */
+  max-height: 100%; /* Maksimum yükseklik sınırlaması */
+}
