@@ -29,6 +29,46 @@ export const getAnnouncements = createAsyncThunk(
     }
   }
 );
+export const saveAnnouncement = createAsyncThunk(
+  "/announcement/saveAnnouncement",
+ 
+  async (data, thunkApi) => {
+    try { 
+      console.log(data)
+      const response = await axios.post("/announcement", data);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+export const updateAnnouncement = createAsyncThunk(
+  "/announcement/updateAnnouncement",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.put(`/announcement/${data.id}`, data);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const deleteAnnouncement = createAsyncThunk(
+  "/announcement/deleteAnnouncement",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.delete(`/announcement/${data.id}`);
+      response.data = {
+        ...data,
+        id: data.id
+      }
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 export const reportSlice = createSlice({
   name: "announcement",

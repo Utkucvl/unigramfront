@@ -1,54 +1,45 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RegisterPage from "../src/components/auth/RegisterPage";
-import LoginPage from "../src/components/auth/LoginPage";
-import ProtectedRoute from "../src/components/api/ProtectedRoute";
-import Dashboard from "./components/dashboard/Dashboard";
-import LeftMenu from "../src/components/nav/LeftMenu";
-import { Layout } from "antd";
-import AnnouncementList from "./components/announcement/AnnouncementList";
-import ActivityList from "./components/activity/ActivityList";
+import React from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import RegisterPage from './components/auth/RegisterPage';
+import LoginPage from './components/auth/LoginPage';
+import AnnouncementList from './components/announcement/AnnouncementList';
+import Navbar from './components/nav2/TopMenu'; // Navbar komponenti import edildi
+import { Layout } from 'antd';
+import MainPageContent from './components/MainPage/MainPage';
+import ActivityList from './components/activity/ActivityList'; // ActivityList komponenti import edildi
 import './App.css';
-const { Sider, Content } = Layout;
+
+const { Content } = Layout;
+
+// Wrapper komponenti useLocation hook'unu kullanmak için oluşturuldu
+function LayoutWithNavbar({ children }) {
+  const location = useLocation();
+  // Navbar'ın gösterilip gösterilmeyeceğini belirleyin
+  const showNavbar = ['/announcement', '/activities', '/'].includes(location.pathname);
+
+  return (
+    <Layout>
+      {showNavbar && <Navbar />}
+      <Content>{children}</Content>
+    </Layout>
+  );
+}
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <Sider width={256} style={{ background: "#fff" }}>
-                  <LeftMenu />
-                </Sider>
-                <Layout>
-                  <Content>
-                    <AnnouncementList />
-                  </Content>
-                </Layout>
-              </Layout>
-            }
-          ></Route>
-          <Route
-            path="/activity"
-            element={
-              <Layout>
-                <Sider width={256} style={{ background: "#fff" }}>
-                  <LeftMenu />
-                </Sider>
-                <Layout>
-                  <Content>
-                    <ActivityList />
-                  </Content>
-                </Layout>
-              </Layout>
-            }
-          ></Route>
-          <Route path="/signup" element={<RegisterPage />} />
-          <Route path="/signin" element={<LoginPage />} />
-        </Routes>
+       
+        <LayoutWithNavbar>
+          <Routes>
+            
+            <Route path="/" element={<MainPageContent />} />
+            <Route path="/signup" element={<RegisterPage />} />
+            <Route path="/signin" element={<LoginPage />} />
+            <Route path="/announcement" element={<AnnouncementList />} />
+            <Route path="/activities" element={<ActivityList />} />
+          </Routes>
+        </LayoutWithNavbar>
       </BrowserRouter>
     </div>
   );

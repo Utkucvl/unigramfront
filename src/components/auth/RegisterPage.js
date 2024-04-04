@@ -99,7 +99,6 @@ function RegisterPage() {
                   style={{ width: "300px", backgroundColor: "rgba(9,9,99,255)",color:"white" }}
                   htmlType="submit"
                 >
-    
                   SIGN UP
                 </Button>
               </Tooltip>

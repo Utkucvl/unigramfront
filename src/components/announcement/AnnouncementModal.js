@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
-
+import './AnnouncementList.css';
 function AnnouncementModal({ announcement, visible, onClose }) {
   if (!announcement) {
     return null; // Eğer announcement null ise modalı render etme
