@@ -3,24 +3,25 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import RegisterPage from './components/auth/RegisterPage';
 import LoginPage from './components/auth/LoginPage';
 import AnnouncementList from './components/announcement/AnnouncementList';
-import Navbar from './components/nav2/TopMenu'; // Navbar komponenti import edildi
+import Navbar from './components/nav2/TopMenu';
+import MyActivities from './components/myactivity/MyActivity '; 
+import NotMyActivity from './components/myactivity/NotMyActivity'; 
 import { Layout } from 'antd';
 import MainPageContent from './components/MainPage/MainPage';
-import ActivityList from './components/activity/ActivityList'; // ActivityList komponenti import edildi
+import ActivityList from './components/activity/ActivityList';
+
 import './App.css';
 
 const { Content } = Layout;
 
-// Wrapper komponenti useLocation hook'unu kullanmak için oluşturuldu
 function LayoutWithNavbar({ children }) {
   const location = useLocation();
-  // Navbar'ın gösterilip gösterilmeyeceğini belirleyin
-  const showNavbar = ['/announcement', '/activities', '/'].includes(location.pathname);
+  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity'].includes(location.pathname); // Navbar'ın gösterilip gösterilmeyeceğini belirle
 
   return (
     <Layout>
       {showNavbar && <Navbar />}
-      <Content>{children}</Content>
+      <Content style={{ padding: '0 50px' }}>{children}</Content>
     </Layout>
   );
 }
@@ -29,15 +30,15 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-       
         <LayoutWithNavbar>
           <Routes>
-            
             <Route path="/" element={<MainPageContent />} />
             <Route path="/signup" element={<RegisterPage />} />
             <Route path="/signin" element={<LoginPage />} />
             <Route path="/announcement" element={<AnnouncementList />} />
             <Route path="/activities" element={<ActivityList />} />
+            <Route path="/myactivities" element={<MyActivities />} />
+            <Route path="/notmyactivity" element={<NotMyActivity />} />
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>

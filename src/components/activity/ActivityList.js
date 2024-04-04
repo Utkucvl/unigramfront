@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import { Card, Input } from "antd"; // Input componentini import ettik
 import Meta from "antd/es/card/Meta";
 import ActivityModal from "./ActivityModal";
+import { FaTimes } from 'react-icons/fa'; // React için Font Awesome'dan çarpı ikonunu dahil ediyoruz
+
 
 import "alertifyjs/build/css/alertify.css";
 import { useCookies } from "react-cookie";
@@ -72,22 +74,18 @@ function ActivityList() {
               </div>
               <div style={{ padding: '10px' }}>
                 <Card.Meta title={activity.name} style={{ marginBottom: '10px' }} />
-                <p style={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: '3',
-                  WebkitBoxOrient: 'vertical'
-                }}>
-                  {activity.content}
-                </p>
-              </div>
-              <div style={{ padding: '10px', textAlign: 'right' }}>
-                <span style={{
-                  color: '#b6b7b8'
-                }}>
-                  {String(activity.date)}
-                </span>
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: '3', WebkitBoxOrient: 'vertical' }}>
+                  <div>{activity.content}</div>
+                </div>
+                <div style={{ textAlign: 'right', marginTop: '10px' }}>
+
+                  <span style={{ color: '#b6b7b8' }}>{String(activity.date)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <div>{/* İçerik */}</div>
+                </div>
+
+
               </div>
             </Card>
           ))}

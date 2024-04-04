@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "antd";
+import { Modal, Button } from "antd";
 
 function ActivityModal({ activity, visible, onClose }) {
   if (!activity) {
@@ -69,6 +69,7 @@ function ActivityModal({ activity, visible, onClose }) {
               {activity.clubName}
             </span>
           </div>
+
         </div>
       </div>
     </Modal>
