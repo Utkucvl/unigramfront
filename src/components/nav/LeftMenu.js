@@ -63,9 +63,6 @@ const LeftMenu = () => {
         <Menu.Item key="sub1" icon={<TeamOutlined />}>
           <Link to="/activity">Activity</Link>
         </Menu.Item>
-        <Menu.Item key="sub2" icon={<FileDoneOutlined />}>
-          <Link to="/reportlist">Reports</Link>
-        </Menu.Item>
         {isLoggedIn ? (
           <Menu.Item key="sub3" icon={<LogoutOutlined />}>
             <span onClick={showLogoutConfirmation}>Logout</span>

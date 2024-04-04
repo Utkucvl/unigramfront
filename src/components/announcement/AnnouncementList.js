@@ -73,6 +73,7 @@ function AnnouncementList() {
                 fontSize: "48px",
                 marginRight: "120vh",
                 fontWeight: "lighter",
+                width : "500px",
               }}
             >
               Announcements
@@ -83,7 +84,7 @@ function AnnouncementList() {
         {announcements.map((announcement) => (
           <div
             key={announcement.id}
-            style={{ textAlign: "left", marginBottom: "10px", cursor: "pointer" }}
+            style={{ textAlign: "left", marginBottom: "10px", marginLeft:"15px", cursor: "pointer" }}
             onClick={() => handleAnnouncementClick(announcement)}
           >
             <h3

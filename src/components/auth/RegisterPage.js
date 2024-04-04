@@ -9,6 +9,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import UIFormInput from "../../libs/UIFormInput";
+import img1 from './resim1.png'
+import nar from './nar.png'
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -49,46 +51,39 @@ function RegisterPage() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "70vh",
-        marginBottom: "125px",
-      }}
-    >
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <img
-          src="https://universitetercihleri.com/uni/logo/24_160.png"
-          alt="AGU Logo"
-        />
-      </div>
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <div>
+    <div className="Top">
+      <div className="cover" style={{ display: "flex", borderRadius: "20px", overflow: "hidden" }}>
+        <div style={{ flex: "1", textAlign: "center", backgroundColor: "rgba(255,255,255,255)" }}>
+          <div style={{ textAlign: "center", marginBottom: "20px" }}>
+            <img
+              style={{ width: "12%", height: "12%", marginTop: "50px" }}
+              src={nar}
+              alt="AGU Logo"
+            />
+          </div>
+          <h2 style={{ fontWeight: 'bold' }}>Welcome to UNIGRAM</h2>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            style={{ display: "flex", flexDirection: "column" }}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
           >
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "2px" }}>
               <UIFormInput
                 name="userName"
                 control={control}
                 errors={errors}
-                placeholder="Enter a username"
+                placeholder="Enter a Username"
               />
             </div>
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "2px" }}>
               <UIFormInput
                 name="password"
                 control={control}
                 errors={errors}
                 type="password"
-                placeholder="Enter a password"
+                placeholder="Enter a  Password"
               />
             </div>
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "2px" }}>
               <UIFormInput
                 name="email"
                 control={control}
@@ -96,40 +91,43 @@ function RegisterPage() {
                 placeholder="Enter an AGU email"
               />
             </div>
-            <div style={{ alignSelf: "center" }}>
-              <Tooltip>
+
+            <div style={{ alignSelf: "center", marginBottom: "10px" }}>
+            <Tooltip>
                 <Button
                   type="primary"
-                  style={{
-                    height: "50px", // Buton yüksekliği
-                    width: "180px", // Buton genişliği
-                    fontSize: "24px", // Simge boyutu
-                    backgroundColor: "#b33b3c",
-                  }}
+                  style={{ width: "300px", backgroundColor: "rgba(9,9,99,255)",color:"white" }}
                   htmlType="submit"
                 >
-                  Sign Up
+    
+                  SIGN UP
                 </Button>
               </Tooltip>
             </div>
-
-            <div
-              style={{
-                marginBottom: "10px",
-                textAlign: "center",
-                marginTop: "22px",
-              }}
-            >
-              Have you an account? Click to{" "}
-              <Link to="/" style={{ color: "#1890ff" }}>
-                login{" "}
+            <div style={{ marginTop: "10px" }}>
+            Have you an account? Click to{" "}
+              <Link to="/signin">
+                Log In{" "}
               </Link>
+
             </div>
           </form>
         </div>
+        <div style={{ flex: "1", padding: "0 20px", backgroundColor: "rgba(230,242,255,255)" }}>
+          <img
+            src={img1}
+            alt="AGU Logo"
+            style={{ width: "100%", display: "block", margin: "0 auto" }}
+          />
+        </div>
       </div>
+
     </div>
+    
+    
   );
 }
 
 export default RegisterPage;
+
+
