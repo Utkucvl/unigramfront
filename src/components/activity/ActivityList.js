@@ -37,7 +37,7 @@ function ActivityList() {
 
   // Aktiviteleri aramak için bir filtre fonksiyonu
   const filteredActivities = Activities.filter((activity) =>
-    activity.name.toLowerCase().includes(searchTerm.toLowerCase())
+    activity.clubName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
     <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '20px', alignItems: 'center' }}>
