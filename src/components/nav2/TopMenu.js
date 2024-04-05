@@ -36,6 +36,8 @@ const TopMenu = () => {
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/activities" className="nav-link">Activities</Link>
         <Link to="/announcement" className="nav-link">Announcements</Link>
+        <Link to="/pastactivity" className="nav-link">Past Activities</Link>
+
         {isLoggedIn ? (
           <Link to="/myactivities" className="nav-link">My Activities</Link>
         ) : (

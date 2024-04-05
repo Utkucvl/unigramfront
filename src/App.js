@@ -9,14 +9,16 @@ import NotMyActivity from './components/myactivity/NotMyActivity';
 import { Layout } from 'antd';
 import MainPageContent from './components/MainPage/MainPage';
 import ActivityList from './components/activity/ActivityList';
-
+import PastActivity from './components/pastactivity/PastActivity';
 import './App.css';
+
+
 
 const { Content } = Layout;
 
 function LayoutWithNavbar({ children }) {
   const location = useLocation();
-  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity'].includes(location.pathname); // Navbar'ın gösterilip gösterilmeyeceğini belirle
+  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity', '/pastactivity'].includes(location.pathname);
 
   return (
     <Layout>
@@ -39,6 +41,7 @@ function App() {
             <Route path="/activities" element={<ActivityList />} />
             <Route path="/myactivities" element={<MyActivities />} />
             <Route path="/notmyactivity" element={<NotMyActivity />} />
+            <Route path="/pastactivity" element={<PastActivity />} />
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>
