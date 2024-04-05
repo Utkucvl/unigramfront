@@ -7,7 +7,7 @@ import './Navbar2.css'; // CSS dosyasını oluşturduğunuzdan emin olun
 import narfoto from './nar.png';
 
 const TopMenu = () => {
-  const isLoggedIn = useSelector((state) => state.security.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.security.isAuthenticated);
   const [, , removeCookie] = useCookies(['userData']);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -37,7 +37,7 @@ const TopMenu = () => {
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/activities" className="nav-link">Activities</Link>
         <Link to="/announcement" className="nav-link">Announcements</Link>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <span className="nav-link" onClick={showModal}>Log Out</span>
         ) : (
           <Link to="/signin" className="nav-link">Log In</Link>
