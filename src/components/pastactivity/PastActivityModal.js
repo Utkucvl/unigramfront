@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button } from "antd";
 
-function ActivityModal({ activity, visible, onClose }) {
+function PastActivityModal({ activity, visible, onClose }) {
   if (!activity) {
     return null; // Eğer announcement null ise modalı render etme
   }
@@ -76,4 +76,4 @@ function ActivityModal({ activity, visible, onClose }) {
   );
 }
 
-export default ActivityModal;
+export default PastActivityModal;

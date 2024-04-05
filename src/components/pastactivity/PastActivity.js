@@ -3,24 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Card, Input } from "antd"; // Input componentini import ettik
 import Meta from "antd/es/card/Meta";
-import ActivityModal from "./ActivityModal";
+import PastActivityModal from "./PastActivityModal";
+
 
 
 import "alertifyjs/build/css/alertify.css";
 import { useCookies } from "react-cookie";
-import { getActivities } from "../../store/activitySlice";
+import { getActivities, getPastActivities } from "../../store/activitySlice";
 
-function ActivityList() {
+function PastActivity() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const Activities = useSelector((state) => state.activity.activities);
+  const pastActivities = useSelector((state) => state.activity.activities);
   const isAuthenticated = useSelector((state) => state.security.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [searchTerm, setSearchTerm] = useState(""); // Arama terimini saklamak için state
 
   useEffect(() => {
-    dispatch(getActivities());
+    dispatch(getPastActivities());
   }, [dispatch]);
 
   const handleActivityClick = (activity) => {
@@ -37,7 +38,7 @@ function ActivityList() {
   };
 
   // Aktiviteleri aramak için bir filtre fonksiyonu
-  const filteredActivities = Activities.filter((activity) =>
+  const filteredActivities = pastActivities.filter((activity) =>
     activity.clubName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
@@ -92,7 +93,7 @@ function ActivityList() {
       </div>
 
       {/* Modal */}
-      <ActivityModal
+      <PastActivityModal
         activity={selectedActivity}
         visible={modalVisible && isAuthenticated}
         onClose={() => setModalVisible(false)}
@@ -103,4 +104,4 @@ function ActivityList() {
 
 }
 
-export default ActivityList;
+export default PastActivity;
