@@ -27,7 +27,7 @@ function AnnouncementList() {
   };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px',}}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px', backgroundColor : 'backgroundColor: ',backgroundColor: '#d2d4d2'}}>
       {announcements.map((announcement) => (
         <Card
           key={announcement.id}
