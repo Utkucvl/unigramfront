@@ -16,7 +16,6 @@ import Stack from '@mui/material/Stack';
 import img1 from './resim1.png'
 import nar from './nar.png'
 
-
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,17 +57,25 @@ function LoginPage() {
   }, [cookies, dispatch, navigate]);
 
   const onSubmit = async (data) => {
-    await dispatch(login({ userName: data.userName, password: data.password }));
-
-    if (localStorage.getItem("accessToken") !== null) {
+    const loginAction = await dispatch(login({ userName: data.userName, password: data.password }));
+    const { payload } = loginAction;
+  
+    if (payload && payload.accessToken) {
       alertify.success("You have logged in");
-      navigate("/");
-      saveToCookie(data);
+      saveToCookie(data);  
+  
+
+      if (payload.role === 'ADMIN') {
+        console.log(payload);
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } else {
       alertify.error("You could not log in");
     }
   };
-
+  
   return (
     <div className="Top">
       <div className="cover" style={{ display: "flex", borderRadius: "20px", overflow: "hidden" }}>
@@ -143,4 +150,5 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
 

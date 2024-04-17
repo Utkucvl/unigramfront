@@ -9,6 +9,7 @@ import { useNavigate } from "react-router";
 
 const TopMenu = () => {
   const isLoggedIn = useSelector((state) => state.security.isAuthenticated);
+  const role = useSelector((state) => state.security.role); // Adding role from state
   const [, , removeCookie] = useCookies(['userData']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const TopMenu = () => {
   const handleOk = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('role');
     removeCookie('userData');
     navigate("/signin");
   };
@@ -28,10 +30,36 @@ const TopMenu = () => {
     setIsModalVisible(false);
   };
 
+  if (localStorage.getItem("role") === 'ADMIN') {
+    return (
+      <div className="navbar">
+        <div className="nav-logo">
+          <img src={narfoto} alt="UniGram Logo" className="logo" />
+          UniGram
+        </div>
+        <div className="nav-menu">
+          <Link to="/adminactivity" className="nav-link">Activities</Link>
+          <Link to="/adminannouncement" className="nav-link">Announcements</Link>
+          <span className="nav-link" onClick={showModal}>Log Out</span>
+        </div>
+        <Modal
+          title="Confirm Logout"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          okText="Logout"
+          cancelText="Cancel"
+        >
+          Are you sure you want to logout?
+        </Modal>
+      </div>
+    );
+  }
+  // For USER, render the full navigation
   return (
     <div className="navbar">
       <div className="nav-logo">
-        <img src={narfoto} alt="UniGram Logo" className="logo"/>
+        <img src={narfoto} alt="UniGram Logo" className="logo" />
         UniGram
       </div>
       <div className="nav-menu">

@@ -4,13 +4,16 @@ import RegisterPage from './components/auth/RegisterPage';
 import LoginPage from './components/auth/LoginPage';
 import AnnouncementList from './components/announcement/AnnouncementList';
 import Navbar from './components/nav2/TopMenu';
-import MyActivities from './components/myactivity/MyActivity '; 
-import NotMyActivity from './components/myactivity/NotMyActivity'; 
+import MyActivities from './components/myactivity/MyActivity ';
+import NotMyActivity from './components/myactivity/NotMyActivity';
 import { Layout } from 'antd';
 import MainPageContent from './components/MainPage/MainPage';
 import ActivityList from './components/activity/ActivityList';
 import PastActivity from './components/pastactivity/PastActivity';
 import './App.css';
+import AdminPage from './components/adminpage/AdminPage'; 
+import AdminAnnouncement from './components/adminpage/AdminAnnouncement'; 
+import AdminActivity from './components/adminpage/AdminActivity'; 
 
 
 
@@ -18,7 +21,7 @@ const { Content } = Layout;
 
 function LayoutWithNavbar({ children }) {
   const location = useLocation();
-  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity', '/pastactivity'].includes(location.pathname);
+  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity', '/pastactivity','/admin', '/adminactivity', '/adminannouncement' ].includes(location.pathname);
 
   return (
     <Layout>
@@ -42,6 +45,10 @@ function App() {
             <Route path="/myactivities" element={<MyActivities />} />
             <Route path="/notmyactivity" element={<NotMyActivity />} />
             <Route path="/pastactivity" element={<PastActivity />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/adminactivity" element={<AdminActivity />} />
+            <Route path="/adminannouncement" element={<AdminAnnouncement />} />
+
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>

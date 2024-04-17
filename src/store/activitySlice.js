@@ -52,19 +52,19 @@ export const getActivity = createAsyncThunk(
       }
     }
   );
-export const saveActivity = createAsyncThunk(
-  "/activity/saveActivity",
- 
-  async (data, thunkApi) => {
-    try { 
-      console.log(data)
-      const response = await axios.post("/activity", data);
-      return response.data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error.response?.data);
+  export const saveActivity = createAsyncThunk(
+    "/activity/saveActivity",
+    async (data, thunkApi) => {
+      try {
+        const response = await axios.post("/activity", data);
+        return response.data;
+      } catch (error) {
+        console.error('Failed to save activity:', error.response?.data);
+        return thunkApi.rejectWithValue(error.response?.data);
+      }
     }
-  }
-);
+  );
+  
 export const updateActivity = createAsyncThunk(
   "/activity/updateActivity",
   async (data, thunkApi) => {
@@ -78,15 +78,11 @@ export const updateActivity = createAsyncThunk(
 );
 
 export const deleteActivity = createAsyncThunk(
-  "/activity/deleteActivity",
-  async (data, thunkApi) => {
+  "activity/deleteActivity",
+  async ({ id }, thunkApi) => {
     try {
-      const response = await axios.delete(`/activity/${data.id}`);
-      response.data = {
-        ...data,
-        id: data.id
-      }
-      return response.data;
+      const response = await axios.delete(`/activity/${id}`);
+      return { id };
     } catch (error) {
       return thunkApi.rejectWithValue(error.response?.data);
     }
