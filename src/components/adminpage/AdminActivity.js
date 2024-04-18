@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Table, Space, Modal, Form, Input } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { Button, Table, Space, Modal, Form, Input, DatePicker, Select } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusSquareOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { getActivities, deleteActivity, updateActivity, saveActivity } from '../../store/activitySlice';
-import Column from 'antd/es/table/Column';
+import { getClubs } from '../../store/clubSlice';
+import moment from 'moment';
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
 
 function AdminActivity() {
     const dispatch = useDispatch();
     const activities = useSelector(state => state.activity.activities);
+    const clubs = useSelector(state => state.club.clubs);
     const [modalVisible, setModalVisible] = useState(false);
+    const [detailModalVisible, setDetailModalVisible] = useState(false);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [selectedActivityDetails, setSelectedActivityDetails] = useState(null);
     const [form] = Form.useForm();
-    const [updatedActivityId, setUpdatedActivityId] = useState(null);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
+        dispatch(getClubs());
         dispatch(getActivities());
     }, [dispatch]);
 
     useEffect(() => {
         if (selectedActivity && modalVisible) {
-            form.setFieldsValue(selectedActivity);
+            const formattedActivity = {
+                ...selectedActivity,
+                date: selectedActivity.date ? moment(selectedActivity.date) : null,
+            };
+            form.setFieldsValue(formattedActivity);
         }
     }, [selectedActivity, modalVisible, form]);
 
@@ -50,26 +59,43 @@ function AdminActivity() {
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
+            if (!values.clubId) {
+                alertify.error('Please select a club!');
+                return;
+            }
+            if (!values.date || !moment(values.date).isValid()) {
+                alertify.error('Invalid date');
+                return;
+            }
+            const payload = {
+                ...values,
+                date: values.date.format('YYYY-MM-DD'),
+                clubid: values.clubId,
+            };
+            delete payload.clubId;
             if (isUpdateMode) {
-                dispatch(updateActivity({ ...selectedActivity, ...values }));
+                dispatch(updateActivity(payload));
                 alertify.success('Activity updated successfully');
-                setUpdatedActivityId(selectedActivity.id);  // Set the updated ID to trigger the reload
             } else {
-                dispatch(saveActivity(values));
+                dispatch(saveActivity(payload));
                 alertify.success('Activity added successfully');
             }
             handleModalClose();
         } catch (errorInfo) {
             console.log('Failed:', errorInfo);
+            alertify.error('Failed to process the request');
         }
     };
 
-    useEffect(() => {
-        if (updatedActivityId) {
-            window.location.reload(); 
-            setUpdatedActivityId(null); 
-        }
-    }, [updatedActivityId]);
+    const showActivityDetails = activity => {
+        setSelectedActivityDetails(activity);
+        setDetailModalVisible(true);
+    };
+
+    const hideActivityDetails = () => {
+        setSelectedActivityDetails(null);
+        setDetailModalVisible(false);
+    };
 
     const renderModalContent = () => (
         <Form form={form} layout="vertical">
@@ -77,28 +103,89 @@ function AdminActivity() {
                 <Input />
             </Form.Item>
             <Form.Item name="content" label="Content" rules={[{ required: true, message: 'Please input the content!' }]}>
-                <Input />
+                <Input.TextArea />
             </Form.Item>
             <Form.Item name="place" label="Place" rules={[{ required: true, message: 'Please input the place!' }]}>
                 <Input />
             </Form.Item>
+            <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please input the date!' }]}>
+                <DatePicker
+                    style={{ width: '100%' }}
+                    placeholder={selectedActivity ? moment(selectedActivity.date).format('YYYY-MM-DD') : "Select date"} />
+            </Form.Item>
+
+            <Form.Item name="photoUrl" label="Photo URL">
+                <Input />
+            </Form.Item>
+            <Form.Item name="clubId" label="Club" rules={[{ required: true, message: 'Please select a club!' }]}>
+                <Select
+                    showSearch
+                    placeholder="Select a club"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                >
+                    {clubs.map(club => (
+                        <Select.Option key={club.id} value={club.id}>{club.name}</Select.Option>
+                    ))}
+                </Select>
+            </Form.Item>
         </Form>
     );
 
+    const renderDetailModalContent = () => (
+        <div>
+            <h3>Name: {selectedActivityDetails.name}</h3>
+            <p>Content: {selectedActivityDetails.content}</p>
+            <p>Place: {selectedActivityDetails.place}</p>
+            <p>Date: {selectedActivityDetails.date}</p>
+            {selectedActivityDetails.photoUrl && (
+                <div>
+                    <img src={selectedActivityDetails.photoUrl} alt="Activity" style={{ maxWidth: '100%', maxHeight: 200, marginBottom: 10 }} />
+                </div>
+            )}
+            {/* Additional details if needed */}
+        </div>
+    );
+
+    const filteredActivities = searchText ? activities.filter(activity =>
+        activity.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        activity.place.toLowerCase().includes(searchText.toLowerCase()) ||
+        activity.id.toString().startsWith(searchText)
+    ) : activities;
+
     return (
         <div>
-            <Table dataSource={activities} rowKey="id">
-                <Column title="ID" dataIndex="id" key="id" />
-                <Column title="Name" dataIndex="name" key="name" />
-                <Column title="Content" dataIndex="content" key="content" />
-                <Column title="Place" dataIndex="place" key="place" />
-                <Column
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginTop: 10, padding: 10 }}>
+                <Input
+                    placeholder="Search activities by name, place, or activity ID"
+                    value={searchText}
+                    onChange={e => setSearchText(e.target.value)}
+                    style={{ width: 900 }}
+                />
+                <Button
+                    type="primary"
+                    icon={<PlusSquareOutlined />}
+                    onClick={() => handleModalOpen()}
+                >
+                    Add New Activity
+                </Button>
+            </div>
+
+            <Table dataSource={filteredActivities} rowKey="id">
+                <Table.Column title="ID" dataIndex="id" key="id" />
+                <Table.Column title="Name" dataIndex="name" key="name" />
+                <Table.Column title="Content" dataIndex="content" key="content" />
+                <Table.Column title="Place" dataIndex="place" key="place" />
+                <Table.Column
                     title="Actions"
                     key="actions"
                     render={(text, activity) => (
                         <Space size="middle">
                             <Button icon={<EditOutlined />} onClick={() => handleModalOpen(activity)} />
                             <Button icon={<DeleteOutlined />} onClick={() => handleDelete(activity.id)} />
+                            <Button icon={<InfoCircleOutlined />} onClick={() => showActivityDetails(activity)} />
                         </Space>
                     )}
                 />
@@ -115,15 +202,14 @@ function AdminActivity() {
                 {renderModalContent()}
             </Modal>
 
-            <Button
-                type="primary"
-                icon={<PlusSquareOutlined />}
-                onClick={() => handleModalOpen()}
-                style={{ marginTop: 16 }}
+            <Modal
+                title="Activity Details"
+                visible={detailModalVisible}
+                onCancel={hideActivityDetails}
+                footer={null}
             >
-                Çalışmaz Düzenlenecek / 
-                Add Activity
-            </Button>
+                {selectedActivityDetails && renderDetailModalContent()}
+            </Modal>
         </div>
     );
 }

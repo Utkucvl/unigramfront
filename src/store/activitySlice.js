@@ -60,10 +60,11 @@ export const getActivity = createAsyncThunk(
         return response.data;
       } catch (error) {
         console.error('Failed to save activity:', error.response?.data);
-        return thunkApi.rejectWithValue(error.response?.data);
+        throw error; 
       }
     }
   );
+  
   
 export const updateActivity = createAsyncThunk(
   "/activity/updateActivity",
