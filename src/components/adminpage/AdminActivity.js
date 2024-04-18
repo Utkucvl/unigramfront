@@ -23,7 +23,7 @@ function AdminActivity() {
     useEffect(() => {
         dispatch(getClubs());
         dispatch(getActivities());
-    }, [dispatch]);
+    }, [dispatch,activities]);
 
     useEffect(() => {
         if (selectedActivity && modalVisible) {
@@ -67,19 +67,25 @@ function AdminActivity() {
                 alertify.error('Invalid date');
                 return;
             }
+           
             const payload = {
                 ...values,
                 date: values.date.format('YYYY-MM-DD'),
                 clubid: values.clubId,
+                id:selectedActivity?.id
             };
             delete payload.clubId;
             if (isUpdateMode) {
+                console.log(payload)
                 dispatch(updateActivity(payload));
+                
                 alertify.success('Activity updated successfully');
             } else {
                 dispatch(saveActivity(payload));
                 alertify.success('Activity added successfully');
+                dispatch(getActivities());
             }
+            dispatch(getActivities());
             handleModalClose();
         } catch (errorInfo) {
             console.log('Failed:', errorInfo);

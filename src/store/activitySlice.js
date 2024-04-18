@@ -70,6 +70,7 @@ export const updateActivity = createAsyncThunk(
   "/activity/updateActivity",
   async (data, thunkApi) => {
     try {
+      console.log(data.name)
       const response = await axios.put(`/activity/${data.id}`, data);
       return response.data;
     } catch (error) {
