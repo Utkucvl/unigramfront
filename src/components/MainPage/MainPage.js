@@ -1,6 +1,6 @@
 import React from 'react';
 import './MainPageContent.css'; // CSS dosyasını import edin
-import resim1 from './resim1.png';
+import resim1 from './resim1.jpg';
 
 const MainPage = () => {
     return (
@@ -12,7 +12,6 @@ const MainPage = () => {
                 </div>
                 <div className="image-container">
                     <img src={resim1} alt="Event illustration" />
-
                 </div>
             </div>
 
