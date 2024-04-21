@@ -42,7 +42,7 @@ function PastActivity() {
     activity.clubName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
-    <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '20px', alignItems: 'center', backgroundColor: '#d2d4d2' }}>
+    <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '20px', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
       {/* Aktivitelerin listelendiği bölüm */}
       <div style={{ marginBottom: '20px', alignSelf: 'center', textAlign: 'center', width: '100%', maxWidth: '400px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}> {/* Yatay eksende büyütme ve gölgelendirme için stil özelliklerini ekledik */}
         <Input

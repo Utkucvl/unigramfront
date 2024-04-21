@@ -44,7 +44,7 @@ function ActivityList() {
   );
 
   return (
-    <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '', alignItems: 'center', backgroundColor: '#d2d4d2',  height: '100vh' }}>
+    <div className="dışDiv" style={{ display: 'flex', flexDirection: 'column', padding: '', alignItems: 'center', backgroundColor: '#f5f5f5',  height: '100vh' }}>
       <div style={{ marginBottom: '20px', marginTop: '20px', alignSelf: 'center', textAlign: 'center', width: '100%', maxWidth: '400px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
         <Input
           placeholder="Search an Event..."
