@@ -31,7 +31,7 @@ function AdminAnnouncements() {
             onOk() {
                 dispatch(deleteAnnouncement({ id })).then(() => {
                     alertify.success('Announcement deleted');
-                    dispatch(getAnnouncements()); 
+                    dispatch(getAnnouncements());
                 });
             },
             onCancel() {
@@ -39,7 +39,7 @@ function AdminAnnouncements() {
             }
         });
     };
-    
+
 
     const handleModalOpen = (announcement = null) => {
         form.resetFields();
@@ -114,9 +114,9 @@ function AdminAnnouncements() {
 
     const renderDetailModalContent = () => (
         <div style={{ textAlign: 'center' }}>
-            <h3>Title: {selectedAnnouncementDetails.title}</h3>
-            <p>Content: {selectedAnnouncementDetails.content}</p>
-            <p>Date: {selectedAnnouncementDetails.announcementDate}</p>
+            <p><strong>Title:</strong> {selectedAnnouncementDetails.title}</p>
+            <p><strong>Content:</strong> {selectedAnnouncementDetails.content}</p>
+            <p><strong>Date:</strong> {selectedAnnouncementDetails.announcementDate}</p>
             {selectedAnnouncementDetails.photoUrl && (
                 <div>
                     <img src={selectedAnnouncementDetails.photoUrl} alt="Announcement" style={{ maxWidth: '100%', maxHeight: 200, marginBottom: 10 }} />
@@ -182,7 +182,11 @@ function AdminAnnouncements() {
             </Modal>
 
             <Modal
-                title={<div style={{ textAlign: 'center' }}>Announcement Details</div>}
+                title={
+                    <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '24px' }}>
+                        Announcement Details
+                    </div>
+                }
                 visible={detailModalVisible}
                 onCancel={hideAnnouncementDetails}
                 footer={null}

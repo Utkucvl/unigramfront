@@ -33,6 +33,7 @@ function AdminActivity() {
             };
             form.setFieldsValue(formattedActivity);
         }
+
     }, [selectedActivity, modalVisible, form]);
 
     const handleDelete = id => {
@@ -56,8 +57,18 @@ function AdminActivity() {
         setSelectedActivity(activity);
         setIsUpdateMode(activity !== null);
         setModalVisible(true);
-        form.resetFields();
+
+        if (activity) {
+            form.setFieldsValue({
+                ...activity,
+                date: activity.date ? moment(activity.date) : null,
+                clubId: activity.clubid
+            });
+        } else {
+            form.resetFields();
+        }
     };
+
 
     const handleModalClose = () => {
         setModalVisible(false);
@@ -67,10 +78,6 @@ function AdminActivity() {
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
-            if (!values.clubId) {
-                alertify.error('Please select a club!');
-                return;
-            }
             if (!values.date || !moment(values.date).isValid()) {
                 alertify.error('Invalid date');
                 return;
@@ -78,20 +85,19 @@ function AdminActivity() {
 
             const payload = {
                 ...values,
-                date: values.date.format('YYYY-MM-DD'),
+                date: values.date.format('YYYY-MM-DD'), // Tarih formatı backend beklentisine göre ayarlanmalı
                 clubid: values.clubId,
                 id: selectedActivity?.id
             };
             delete payload.clubId;
-            if (isUpdateMode) {
-                console.log(payload)
-                dispatch(updateActivity(payload));
 
+            // Update veya Save işlemi
+            if (isUpdateMode) {
+                dispatch(updateActivity(payload));
                 alertify.success('Activity updated successfully');
             } else {
                 dispatch(saveActivity(payload));
                 alertify.success('Activity added successfully');
-                dispatch(getActivities());
             }
             dispatch(getActivities());
             handleModalClose();
@@ -100,6 +106,7 @@ function AdminActivity() {
             alertify.error('Failed to process the request');
         }
     };
+
 
     const showActivityDetails = activity => {
         setSelectedActivityDetails(activity);
@@ -128,7 +135,7 @@ function AdminActivity() {
                     placeholder="Select date for the activity"
                 />
             </Form.Item>
-    
+
             <Form.Item name="photoUrl" label="Photo URL">
                 <Input placeholder="Enter the URL of the photo for the activity" />
             </Form.Item>
@@ -140,29 +147,32 @@ function AdminActivity() {
                     filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
+                    value={isUpdateMode ? selectedActivity?.clubid : undefined}
                 >
                     {clubs.map(club => (
                         <Select.Option key={club.id} value={club.id}>{club.name}</Select.Option>
                     ))}
                 </Select>
             </Form.Item>
+
         </Form>
     );
-    
+
+
 
     const renderDetailModalContent = () => (
         <div style={{ textAlign: 'center' }}>
-            <h3>Name: {selectedActivityDetails.name}</h3>
-            <p>Content: {selectedActivityDetails.content}</p>
-            <p>Place: {selectedActivityDetails.place}</p>
-            <p>Date: {selectedActivityDetails.date}</p>
-            <p>Club: {selectedActivityDetails.clubid ? clubs.find(club => club.id === selectedActivityDetails.clubid)?.name : 'Unknown'}</p>
+            <p><strong>Name:</strong>: {selectedActivityDetails.name}</p>
+            <p><strong>Content:</strong> {selectedActivityDetails.content}</p>
+            <p><strong>Place: </strong>{selectedActivityDetails.place}</p>
+            <p><strong>Date:</strong> {selectedActivityDetails.date}</p>
+            <p><strong>Club:</strong> {selectedActivityDetails.clubid ? clubs.find(club => club.id === selectedActivityDetails.clubid)?.name : 'Unknown'}</p>
             {selectedActivityDetails.photoUrl && (
                 <div>
                     <img src={selectedActivityDetails.photoUrl} alt="Activity" style={{ maxWidth: '100%', maxHeight: 200, marginBottom: 10 }} />
                 </div>
             )}
-            {/* Additional details if needed */}
+       
         </div>
     );
 
@@ -231,7 +241,7 @@ function AdminActivity() {
             </Modal>
 
             <Modal
-                title={<div style={{ textAlign: 'center' }}>Activity Details</div>}
+                title={<div style={{  textAlign: 'center', fontWeight: 'bold', fontSize: '24px' }}>Activity Details</div>}
                 visible={detailModalVisible}
                 onCancel={hideActivityDetails}
                 footer={null}
