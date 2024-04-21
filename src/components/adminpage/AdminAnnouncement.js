@@ -22,17 +22,24 @@ function AdminAnnouncements() {
     useEffect(() => {
         dispatch(getAnnouncements());
     }, [dispatch]);
-
     const handleDelete = id => {
-        alertify.confirm("Are you sure you want to delete this announcement?", () => {
-            dispatch(deleteAnnouncement({ id })).then(() => {
-                alertify.success('Announcement deleted');
-                dispatch(getAnnouncements()); // Refetch announcements after a successful delete
-            });
-        }, () => {
-            alertify.error('Delete cancelled');
+        Modal.confirm({
+            title: "Warning!",
+            content: "Are you sure you want to delete this announcement?",
+            okText: "Yes",
+            cancelText: "No",
+            onOk() {
+                dispatch(deleteAnnouncement({ id })).then(() => {
+                    alertify.success('Announcement deleted');
+                    dispatch(getAnnouncements()); 
+                });
+            },
+            onCancel() {
+                alertify.error('Delete cancelled');
+            }
         });
     };
+    
 
     const handleModalOpen = (announcement = null) => {
         form.resetFields();
@@ -106,7 +113,7 @@ function AdminAnnouncements() {
     );
 
     const renderDetailModalContent = () => (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h3>Title: {selectedAnnouncementDetails.title}</h3>
             <p>Content: {selectedAnnouncementDetails.content}</p>
             <p>Date: {selectedAnnouncementDetails.announcementDate}</p>
@@ -117,6 +124,7 @@ function AdminAnnouncements() {
             )}
         </div>
     );
+
 
     const filteredAnnouncements = searchText ? announcements.filter(a =>
         a.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -174,13 +182,14 @@ function AdminAnnouncements() {
             </Modal>
 
             <Modal
-                title="Announcement Details"
+                title={<div style={{ textAlign: 'center' }}>Announcement Details</div>}
                 visible={detailModalVisible}
                 onCancel={hideAnnouncementDetails}
                 footer={null}
             >
                 {selectedAnnouncementDetails && renderDetailModalContent()}
             </Modal>
+
         </div>
     );
 

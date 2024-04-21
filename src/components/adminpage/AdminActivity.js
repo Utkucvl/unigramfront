@@ -23,7 +23,7 @@ function AdminActivity() {
     useEffect(() => {
         dispatch(getClubs());
         dispatch(getActivities());
-    }, [dispatch,activities]);
+    }, [dispatch, activities]);
 
     useEffect(() => {
         if (selectedActivity && modalVisible) {
@@ -36,13 +36,21 @@ function AdminActivity() {
     }, [selectedActivity, modalVisible, form]);
 
     const handleDelete = id => {
-        alertify.confirm("Are you sure you want to delete this activity?", () => {
-            dispatch(deleteActivity({ id }));
-            alertify.success('Activity deleted');
-        }, () => {
-            alertify.error('Delete cancelled');
+        Modal.confirm({
+            title: "Warning!",
+            content: "Are you sure you want to delete this activity?",
+            okText: "Yes",
+            cancelText: "No",
+            onOk() {
+                dispatch(deleteActivity({ id }));
+                alertify.success('Activity deleted');
+            },
+            onCancel() {
+                alertify.error('Delete cancelled');
+            }
         });
     };
+
 
     const handleModalOpen = (activity = null) => {
         setSelectedActivity(activity);
@@ -67,18 +75,18 @@ function AdminActivity() {
                 alertify.error('Invalid date');
                 return;
             }
-           
+
             const payload = {
                 ...values,
                 date: values.date.format('YYYY-MM-DD'),
                 clubid: values.clubId,
-                id:selectedActivity?.id
+                id: selectedActivity?.id
             };
             delete payload.clubId;
             if (isUpdateMode) {
                 console.log(payload)
                 dispatch(updateActivity(payload));
-                
+
                 alertify.success('Activity updated successfully');
             } else {
                 dispatch(saveActivity(payload));
@@ -106,22 +114,23 @@ function AdminActivity() {
     const renderModalContent = () => (
         <Form form={form} layout="vertical">
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
-                <Input />
+                <Input placeholder="Enter the name of the activity" />
             </Form.Item>
             <Form.Item name="content" label="Content" rules={[{ required: true, message: 'Please input the content!' }]}>
-                <Input.TextArea />
+                <Input.TextArea placeholder="Enter the content of the activity" />
             </Form.Item>
             <Form.Item name="place" label="Place" rules={[{ required: true, message: 'Please input the place!' }]}>
-                <Input />
+                <Input placeholder="Enter the place of the activity" />
             </Form.Item>
             <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please input the date!' }]}>
                 <DatePicker
                     style={{ width: '100%' }}
-                    placeholder={selectedActivity ? moment(selectedActivity.date).format('YYYY-MM-DD') : "Select date"} />
+                    placeholder="Select date for the activity"
+                />
             </Form.Item>
-
+    
             <Form.Item name="photoUrl" label="Photo URL">
-                <Input />
+                <Input placeholder="Enter the URL of the photo for the activity" />
             </Form.Item>
             <Form.Item name="clubId" label="Club" rules={[{ required: true, message: 'Please select a club!' }]}>
                 <Select
@@ -139,13 +148,15 @@ function AdminActivity() {
             </Form.Item>
         </Form>
     );
+    
 
     const renderDetailModalContent = () => (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h3>Name: {selectedActivityDetails.name}</h3>
             <p>Content: {selectedActivityDetails.content}</p>
             <p>Place: {selectedActivityDetails.place}</p>
             <p>Date: {selectedActivityDetails.date}</p>
+            <p>Club: {selectedActivityDetails.clubid ? clubs.find(club => club.id === selectedActivityDetails.clubid)?.name : 'Unknown'}</p>
             {selectedActivityDetails.photoUrl && (
                 <div>
                     <img src={selectedActivityDetails.photoUrl} alt="Activity" style={{ maxWidth: '100%', maxHeight: 200, marginBottom: 10 }} />
@@ -165,7 +176,7 @@ function AdminActivity() {
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginTop: 10, padding: 10 }}>
                 <Input
-                    placeholder="Search activities by name, place, or activity ID"
+                    placeholder="Search an activities by name, place, or activity ID"
                     value={searchText}
                     onChange={e => setSearchText(e.target.value)}
                     style={{ width: 900 }}
@@ -183,7 +194,18 @@ function AdminActivity() {
                 <Table.Column title="ID" dataIndex="id" key="id" />
                 <Table.Column title="Name" dataIndex="name" key="name" />
                 <Table.Column title="Content" dataIndex="content" key="content" />
+                <Table.Column title="Date" dataIndex="date" key="date" />
                 <Table.Column title="Place" dataIndex="place" key="place" />
+                <Table.Column
+                    title="Club"
+                    dataIndex="clubid"
+                    key="clubid"
+                    render={(clubid) => {
+                        const club = clubs.find(club => club.id === clubid);
+                        return club ? club.name : 'Unknown';
+                    }}
+                />
+
                 <Table.Column
                     title="Actions"
                     key="actions"
@@ -209,7 +231,7 @@ function AdminActivity() {
             </Modal>
 
             <Modal
-                title="Activity Details"
+                title={<div style={{ textAlign: 'center' }}>Activity Details</div>}
                 visible={detailModalVisible}
                 onCancel={hideActivityDetails}
                 footer={null}
