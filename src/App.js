@@ -11,9 +11,10 @@ import MainPageContent from './components/MainPage/MainPage';
 import ActivityList from './components/activity/ActivityList';
 import PastActivity from './components/pastactivity/PastActivity';
 import './App.css';
-import AdminPage from './components/adminpage/AdminPage'; 
-import AdminAnnouncement from './components/adminpage/AdminAnnouncement'; 
-import AdminActivity from './components/adminpage/AdminActivity'; 
+import AdminPage from './components/adminpage/homePageOfAdmin/AdminPage'; 
+import AdminAnnouncement from './components/adminpage/adminPageAnnouncement/AdminAnnouncement'; 
+import AdminActivity from './components/adminpage/adminPageActivity/AdminActivity'; 
+
 
 
 
@@ -48,7 +49,6 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/adminactivity" element={<AdminActivity />} />
             <Route path="/adminannouncement" element={<AdminAnnouncement />} />
-
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>

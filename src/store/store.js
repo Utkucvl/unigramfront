@@ -4,12 +4,16 @@ import announcementSlice from "./announcementSlice";
 import activitySlice from "./activitySlice";
 import myActivitySlice from "./myActivitySlice";
 import clubSlice from "./clubSlice";
+import userSlice from "./userSlice"
+
 export const store = configureStore({
   reducer: {
     security: securitySlice,
     announcement: announcementSlice,
     activity:activitySlice,
     myActivity:myActivitySlice,
-    club:clubSlice
+    club:clubSlice,
+    user:userSlice,
+
   },
 });

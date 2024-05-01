@@ -16,7 +16,7 @@ function MyActivity() {
   useEffect(() => {
     dispatch(getMyActivities({ userId: localStorage.getItem("userId") }));
     console.log(myActivities)
-  }, [dispatch, myActivities]);
+  }, [dispatch]);
 
   const handleActivityClick = (myActivity) => {
     setSelectedMyActivity(myActivity);
@@ -25,6 +25,7 @@ function MyActivity() {
 
   const closeModal = () => {
     setModalVisible(false);
+    dispatch(getMyActivities({ userId: localStorage.getItem("userId") }));
   };
 
 
@@ -56,7 +57,7 @@ function MyActivity() {
       <MyActivityModal
         myActivity={selectedMyActivity}
         visible={modalVisible && isAuthenticated}
-        onClose={() => setModalVisible(false)}
+        onClose={() => closeModal()}
       />
     </div>
   );
