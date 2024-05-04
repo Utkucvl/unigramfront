@@ -56,6 +56,7 @@ export const clubSlice = createSlice({
       state.loading = false;
       state.err = "Problem on getting Data.";
     });
+    
 
   },
 });

@@ -19,9 +19,11 @@ import AnnouncementForm from "./AdminAnnouncementForm";
 
 import "alertifyjs/build/css/alertify.css";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 function AdminAnnouncements() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const announcements = useSelector(
     (state) => state.announcement.announcements
   );
@@ -85,8 +87,10 @@ function AdminAnnouncements() {
         alertify.success("Announcement updated successfully");
       } else {
         values.announcementDate=moment()
-        await dispatch(saveAnnouncement(values));
+        const response = await dispatch(saveAnnouncement(values));
+        const newAnnouncementId = response.payload.id
         alertify.success("Announcement added successfully");
+        navigate(`/uploadImageAnnouncement/${newAnnouncementId}`);
       }
       dispatch(getAnnouncements());
       handleModalClose();

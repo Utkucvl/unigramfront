@@ -15,7 +15,7 @@ function AnnouncementList() {
 
   useEffect(() => {
     dispatch(getAnnouncements());
-  }, [dispatch]);
+  }, [dispatch,announcements]);
 
   const handleAnnouncementClick = (announcement) => {
     setSelectedAnnouncement(announcement);

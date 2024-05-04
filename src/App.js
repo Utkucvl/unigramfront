@@ -1,33 +1,43 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import RegisterPage from './components/auth/RegisterPage';
-import LoginPage from './components/auth/LoginPage';
-import AnnouncementList from './components/announcement/AnnouncementList';
-import Navbar from './components/nav2/TopMenu';
-import MyActivities from './components/myactivity/MyActivity ';
-import NotMyActivity from './components/myactivity/NotMyActivity';
-import { Layout } from 'antd';
-import MainPageContent from './components/MainPage/MainPage';
-import ActivityList from './components/activity/ActivityList';
-import PastActivity from './components/pastactivity/PastActivity';
-import './App.css';
-import AdminPage from './components/adminpage/homePageOfAdmin/AdminPage'; 
-import AdminAnnouncement from './components/adminpage/adminPageAnnouncement/AdminAnnouncement'; 
-import AdminActivity from './components/adminpage/adminPageActivity/AdminActivity'; 
-
-
-
+import React from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import RegisterPage from "./components/auth/RegisterPage";
+import LoginPage from "./components/auth/LoginPage";
+import AnnouncementList from "./components/announcement/AnnouncementList";
+import Navbar from "./components/nav2/TopMenu";
+import MyActivities from "./components/myactivity/MyActivity ";
+import NotMyActivity from "./components/myactivity/NotMyActivity";
+import { Layout } from "antd";
+import MainPageContent from "./components/MainPage/MainPage";
+import ActivityList from "./components/activity/ActivityList";
+import PastActivity from "./components/pastactivity/PastActivity";
+import "./App.css";
+import AdminPage from "./components/adminpage/homePageOfAdmin/AdminPage";
+import AdminAnnouncement from "./components/adminpage/adminPageAnnouncement/AdminAnnouncement";
+import AdminActivity from "./components/adminpage/adminPageActivity/AdminActivity";
+import UploadImage from "./components/adminpage/homePageOfAdmin/uploadImage";
+import UploadImageAnnouncement from "./components/adminpage/adminPageAnnouncement/uploadImageAnnouncement";
+import UploadImageActivity from "./components/adminpage/adminPageActivity/uploadImageActivity";
 
 const { Content } = Layout;
 
 function LayoutWithNavbar({ children }) {
   const location = useLocation();
-  const showNavbar = ['/announcement', '/activities', '/', '/myactivities', '/notmyactivity', '/pastactivity','/admin', '/adminactivity', '/adminannouncement' ].includes(location.pathname);
+  const showNavbar = [
+    "/announcement",
+    "/activities",
+    "/",
+    "/myactivities",
+    "/notmyactivity",
+    "/pastactivity",
+    "/admin",
+    "/adminactivity",
+    "/adminannouncement",
+  ].includes(location.pathname);
 
   return (
     <Layout>
       {showNavbar && <Navbar />}
-      <Content style={{ padding: '0 50px' }}>{children}</Content>
+      <Content style={{ padding: "0 50px" }}>{children}</Content>
     </Layout>
   );
 }
@@ -49,6 +59,15 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/adminactivity" element={<AdminActivity />} />
             <Route path="/adminannouncement" element={<AdminAnnouncement />} />
+            <Route path="/uploadImage" element={<UploadImage />} />
+            <Route
+              path="/uploadImageAnnouncement/:announcementId"
+              element={<UploadImageAnnouncement />}
+            />
+            <Route
+              path="/uploadImageActivity/:activityId"
+              element={<UploadImageActivity />}
+            />
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>

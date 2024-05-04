@@ -12,6 +12,7 @@ import {
   deleteActivity,
   updateActivity,
   saveActivity,
+  changeActivity,
 } from "../../../store/activitySlice";
 import { getUsers } from "../../../store/userSlice";
 import { getClubs } from "../../../store/clubSlice";
@@ -20,10 +21,14 @@ import AdminActivityForm from "./AdminActivityForm";
 import AdminActivityModal from "./AdminActivityModal"; // Detay modalını içeren bileşen
 import alertify from "alertifyjs";
 import "alertifyjs/build/css/alertify.css";
+import { useNavigate } from "react-router-dom";
+import { current } from "@reduxjs/toolkit";
 
 const AdminActivity = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const activities = useSelector((state) => state.activity.activities);
+  const currentActivity = useSelector((state) => state.activity.currentActivity);
   const clubs = useSelector((state) => state.club.clubs);
   const users = useSelector((state) => state.user.users);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,12 +70,11 @@ const AdminActivity = () => {
       },
     });
   };
-
   const handleModalOpen = (activity = null) => {
     setSelectedActivity(activity);
     setIsUpdateMode(activity !== null);
     setModalVisible(true);
-
+  
     if (activity) {
       form.setFieldsValue({
         ...activity,
@@ -81,6 +85,7 @@ const AdminActivity = () => {
       form.resetFields();
     }
   };
+  
 
   const handleModalClose = () => {
     setModalVisible(false);
@@ -95,22 +100,24 @@ const AdminActivity = () => {
         alertify.error("Invalid date");
         return;
       }
-
+  
       const payload = {
         ...values,
         date: values.date.format("YYYY-MM-DD"),
         clubid: values.clubId,
-        id: selectedActivity?.id,
       };
       delete payload.clubId;
-
+  
       const action = isUpdateMode ? updateActivity : saveActivity;
-      dispatch(action(payload));
+      const response = await dispatch(action(payload));
+      const newActivityId = response.payload.id; // Yeni etkinliğin ID'sini alıyoruz
       alertify.success(
         isUpdateMode
           ? "Activity updated successfully"
           : "Activity added successfully"
       );
+      console.log(payload);
+      navigate(`/uploadImageActivity/${newActivityId}`);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
       alertify.error("Failed to process the request");
@@ -119,7 +126,7 @@ const AdminActivity = () => {
       handleModalClose();
     }
   };
-
+  
   const showActivityDetails = (activity) => {
     setSelectedActivityDetails(activity);
     setDetailModalVisible(true);

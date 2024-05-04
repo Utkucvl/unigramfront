@@ -93,6 +93,70 @@ export const reportSlice = createSlice({
       state.loading = false;
       state.err = "Problem on getting Data.";
     });
+    builder.addCase(
+      saveAnnouncement.fulfilled,
+      (state, action) => {
+        state.announcements.push(action.payload);
+        state.loading = false;
+      }
+    );
+
+    builder.addCase(saveAnnouncement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      saveAnnouncement.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.err = { message: "Error on Saving" };
+      }
+    );
+    builder.addCase(
+      updateAnnouncement.fulfilled,
+      (state, action) => {
+        const index = state.announcements.findIndex((n) => n.id === action.payload.id);
+        if (index !== -1) {
+          state.announcements[index] = action.payload;
+        }
+        state.loading = false;
+
+      }
+    );
+
+    builder.addCase(updateAnnouncement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      updateAnnouncement.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.err = { message: "Error on updating" };
+      }
+    );
+    builder.addCase(
+      deleteAnnouncement.fulfilled,
+      (state, action) => {
+        state.announcements = state.announcements.filter((n) => n.id !== action.payload.id);
+        state.loading = false;
+      }
+    );
+
+    builder.addCase(deleteAnnouncement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      deleteAnnouncement.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.err = { message: "Error on deleting" };
+      }
+    );
+
+
+
   },
 });
 
