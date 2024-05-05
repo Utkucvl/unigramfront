@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { Card } from 'antd';
 import { getAnnouncements } from "../../store/announcementSlice";
 import AnnouncementModal from "./AnnouncementModal";
+import { getImageByIdAnnouncement } from "../../store/imageSlice";
 
 function AnnouncementList() {
   const dispatch = useDispatch();
@@ -12,10 +13,28 @@ function AnnouncementList() {
   const isAuthenticated = useSelector((state) => state.security.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [imageSources, setImageSources] = useState({});
 
   useEffect(() => {
-    dispatch(getAnnouncements());
-  }, [dispatch,announcements]);
+    const fetchData = async () => {
+      await dispatch(getAnnouncements());
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const sources = {};
+      await Promise.all(announcements.map(async (announcement) => {
+        const result = await dispatch(getImageByIdAnnouncement(announcement)); 
+        sources[announcement.id] = result.payload.base64Image;
+      }));
+      setImageSources(sources);
+    };
+
+    fetchImages();
+  }, [dispatch, announcements]);
 
   const handleAnnouncementClick = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -33,7 +52,7 @@ function AnnouncementList() {
           key={announcement.id}
           hoverable
           style={{ width: 240, height: 320, overflow: 'hidden', display: 'flex', flexDirection: 'column', marginBottom: "10" }}
-          cover={<img alt="announcement" src={announcement.photoUrl} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />}
+          cover={<img alt="announcement" src={imageSources[announcement.id]} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />}
           onClick={() => handleAnnouncementClick(announcement)}
         >
           <div style={{ padding: '10px' }}>

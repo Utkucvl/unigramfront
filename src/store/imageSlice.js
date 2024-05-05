@@ -20,6 +20,40 @@ export const getImageById = createAsyncThunk(
     }
   }
 );
+export const getImageByIdClub = createAsyncThunk(
+  "/image/getImageByIdClub",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.get("/baseimage/club/" + data.id);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+export const getImageByIdAnnouncement = createAsyncThunk(
+  "/image/getImageByIdAnnouncement",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.get("/baseimage/announcement/" + data.id);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+export const getImageByIdActivity = createAsyncThunk(
+  "/image/getImageByIdActivity",
+  async (data, thunkApi) => {
+    console.log(data.id)
+    try {
+      const response = await axios.get("/baseimage/activity/" + data.id);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 export const saveImage = createAsyncThunk(
   "/image/saveImage",

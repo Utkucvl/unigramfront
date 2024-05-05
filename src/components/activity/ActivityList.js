@@ -9,6 +9,7 @@ import "alertifyjs/build/css/alertify.css";
 import { useCookies } from "react-cookie";
 import { getActivities } from "../../store/activitySlice";
 import { getMyActivities } from "../../store/myActivitySlice";
+import { getImageByIdActivity } from "../../store/imageSlice";
 
 function ActivityList() {
   const dispatch = useDispatch();
@@ -21,11 +22,30 @@ function ActivityList() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [imageSources, setImageSources] = useState({});
 
   useEffect(() => {
     dispatch(getActivities());
     dispatch(getMyActivities({ userId: localStorage.getItem("userId") }));
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const sources = {};
+        await Promise.all(Activities.map(async (activity) => {
+          const result = await dispatch(getImageByIdActivity(activity)); 
+          sources[activity.id] = result.payload.base64Image;
+        }));
+        setImageSources(sources);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+  
+    fetchImages();
+  }, [dispatch, Activities]);
+  
 
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
@@ -112,8 +132,8 @@ function ActivityList() {
                 }}
                 cover={
                   <img
-                    alt="announcement"
-                    src={activity.photoUrl}
+                    alt="Activity"
+                    src={imageSources[activity.id]} 
                     style={{
                       width: "100%",
                       height: "160px",
