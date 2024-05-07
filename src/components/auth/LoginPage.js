@@ -82,7 +82,7 @@ function LoginPage() {
         <div style={{ flex: "1", textAlign: "center", backgroundColor: "rgba(255,255,255,255)" }}>
           <div style={{ textAlign: "center", marginBottom: "20px" }}>
             <img
-              style={{ width: "12%", height: "12%", marginTop: "50px" }}
+              style={{ width: "12%", height: "12%", marginTop: "125px" }}
               src={nar}
               alt="AGU Logo"
             />

@@ -1,33 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'antd';
 import { useDispatch } from "react-redux";
 import { quitActivity } from '../../store/myActivitySlice';
+import { getImageByIdActivity } from "../../store/imageSlice";
 
 function MyActivityModal({ myActivity, visible, onClose }) {
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state for the button
+  const [loading, setLoading] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (myActivity && visible) {
+      const fetchImage = async () => {
+        const result = await dispatch(getImageByIdActivity({ id: myActivity.id }));
+        if (result.payload && result.payload.base64Image) {
+          setImageSrc(result.payload.base64Image);
+        }
+      };
+
+      fetchImage();
+    }
+  }, [myActivity, visible, dispatch]);
 
   if (!myActivity) {
     return null;
   }
 
   const handleQuit = async (activityId, userId) => {
-    setLoading(true); // Set loading to true when the button is clicked
+    setLoading(true); 
     try {
       await dispatch(quitActivity({ userId: userId, activityId: activityId }));
-      setConfirmVisible(false); // Close the confirmation pop-up
-      onClose(); // Close the main modal
+      setConfirmVisible(false); 
+      onClose(); 
     } catch (error) {
-      console.error("Error joining activity:", error);
+      console.error("Error quitting activity:", error);
     } finally {
-      setLoading(false); // Reset loading to false after the request completes
+      setLoading(false); 
     }
   };
 
   const handleCancelConfirm = () => {
-    setConfirmVisible(false); // Close the confirmation modal
-    onClose(); // Close the main modal
+    setConfirmVisible(false); 
+    onClose();
   };
 
   return (
@@ -40,14 +55,14 @@ function MyActivityModal({ myActivity, visible, onClose }) {
       >
         <div style={{ textAlign: "center" }}>
           <img
-            src={myActivity.photoUrl}
+            src={imageSrc}
             alt="Activity"
             style={{
               width: "70%",
               margin: "0 auto",
-              objectFit: "cover", // Görüntüyü tamamen kaplayacak şekilde boyutlandırma
-              objectPosition: "center", // Görüntüyü ortalamak için
-              maxHeight: "200px", // Maksimum yükseklik 210 piksel olacak
+              objectFit: "cover",
+              objectPosition: "center",
+              maxHeight: "200px",
               marginTop: "48px",
               borderRadius: "25px",
               boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
@@ -89,9 +104,9 @@ function MyActivityModal({ myActivity, visible, onClose }) {
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <Button
             type="primary"
-            style={{backgroundColor:"red"}}
+            style={{ backgroundColor: "red" }}
             onClick={() => setConfirmVisible(true)}
-            loading={loading} // Set loading state for the button
+            loading={loading} 
           >
             Quit This Activity
           </Button>

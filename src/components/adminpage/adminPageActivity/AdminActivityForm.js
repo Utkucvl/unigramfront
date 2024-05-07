@@ -1,4 +1,3 @@
-// AdminActivityForm.js
 
 import React from 'react';
 import { Form, Input, DatePicker, Select } from 'antd';
@@ -26,9 +25,7 @@ const AdminActivityForm = ({ form, clubs, isUpdateMode, selectedActivity }) => {
                 />
             </Form.Item>
 
-            <Form.Item name="photoUrl" label="Photo URL">
-                <Input placeholder="Enter the URL of the photo for the activity" />
-            </Form.Item>
+         
             <Form.Item name="clubId" label="Club" rules={[{ required: true, message: 'Please select a club!' }]}>
                 <Select
                     showSearch

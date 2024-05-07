@@ -20,9 +20,7 @@ const AdminAnnouncementForm = ({ form, selectedAnnouncement }) => {
       >
         <Input placeholder="Please Enter A Content" />
       </Form.Item>
-      <Form.Item name="photoUrl" label="Photo URL">
-        <Input placeholder="Please Enter An Invalid Photo URL" />
-      </Form.Item>
+     
     </Form>
   );
 };

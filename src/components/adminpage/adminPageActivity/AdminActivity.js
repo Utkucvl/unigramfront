@@ -73,7 +73,7 @@ const AdminActivity = () => {
     setSelectedActivity(activity);
     setIsUpdateMode(activity !== null);
     setModalVisible(true);
-  
+
     if (activity) {
       form.setFieldsValue({
         ...activity,
@@ -84,7 +84,7 @@ const AdminActivity = () => {
       form.resetFields();
     }
   };
-  
+
 
   const handleModalClose = () => {
     setModalVisible(false);
@@ -110,6 +110,7 @@ const AdminActivity = () => {
   
       const payload = {
         ...values,
+        id: selectedActivity ? selectedActivity.id : null,
         date: values.date.format("YYYY-MM-DD"),
         clubid: values.clubId,
       };
@@ -117,14 +118,17 @@ const AdminActivity = () => {
   
       const action = isUpdateMode ? updateActivity : saveActivity;
       const response = await dispatch(action(payload));
-      const newActivityId = response.payload.id; // Yeni etkinliğin ID'sini alıyoruz
+      const newActivityId = response.payload.id;
       alertify.success(
         isUpdateMode
           ? "Activity updated successfully"
           : "Activity added successfully"
       );
       console.log(payload);
-      navigate(`/uploadImageActivity/${newActivityId}`);
+  
+      if (!isUpdateMode) { 
+        navigate(`/uploadImageActivity/${newActivityId}`);
+      }
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
       alertify.error("Failed to process the request");
@@ -134,7 +138,9 @@ const AdminActivity = () => {
     }
   };
   
-  
+
+
+
   const showActivityDetails = (activity) => {
     setSelectedActivityDetails(activity);
     setDetailModalVisible(true);
@@ -156,36 +162,38 @@ const AdminActivity = () => {
     return userNames;
   };
   const handleParticipantClick = (activity) => {
-    const participantNames = getUserNamesFromIds(activity.usersId);
+    const usersId = activity?.usersId || [];
+    const participantNames = getUserNamesFromIds(usersId);
     Modal.info({
       content: (
         <div>
           {participantNames.length === 0 ? (
-            <span></span>
+            <span>No Participant</span>
           ) : (
-            <strong>Participants:</strong>
+            <div>
+              <strong>Participants:</strong>
+              <p></p>
+              <ul>
+                {participantNames.map((name, index) => (
+                  <li key={index}>{name}</li>
+                ))}
+              </ul>
+            </div>
           )}
-          <p></p>
-          <ul>
-            {participantNames.length === 0 ? (
-              <span>No Participant</span>
-            ) : (
-              participantNames.map((name, index) => <li key={index}>{name}</li>)
-            )}
-          </ul>
         </div>
       ),
-      onOk() {},
+      onOk() { }
     });
   };
 
+
   const filteredActivities = searchText
     ? activities.filter(
-        (activity) =>
-          activity.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          activity.place.toLowerCase().includes(searchText.toLowerCase()) ||
-          activity.id.toString().startsWith(searchText)
-      )
+      (activity) =>
+        activity.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        activity.place.toLowerCase().includes(searchText.toLowerCase()) ||
+        activity.id.toString().startsWith(searchText)
+    )
     : activities;
 
   return (
@@ -236,10 +244,11 @@ const AdminActivity = () => {
           key="participants"
           render={(usersId, activity) => (
             <span onClick={() => handleParticipantClick(activity)}>
-              {activity.usersId.length}
+              {Array.isArray(activity.usersId) ? activity.usersId.length : 0}
             </span>
           )}
         />
+
         <Table.Column
           title="Actions"
           key="actions"
@@ -287,5 +296,4 @@ const AdminActivity = () => {
     </div>
   );
 };
-
 export default AdminActivity;

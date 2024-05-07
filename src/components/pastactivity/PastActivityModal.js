@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
+import { useDispatch } from "react-redux";
 import { Modal, Button } from "antd";
+import { getImageByIdActivity } from "../../store/imageSlice";
 
 function PastActivityModal({ activity, visible, onClose }) {
+  const dispatch = useDispatch();
+  const [imageSrc, setImageSrc] = useState('');
+  
+  useEffect(() => {
+    if (activity && visible) {
+      const fetchImage = async () => {
+        const result = await dispatch(getImageByIdActivity({ id: activity.id }));
+        if (result.payload && result.payload.base64Image) {
+          setImageSrc(result.payload.base64Image);
+        }
+      };
+
+      fetchImage();
+    }
+  }, [activity, visible, dispatch]);
   if (!activity) {
     return null; // Eğer announcement null ise modalı render etme
   }
@@ -15,7 +32,7 @@ function PastActivityModal({ activity, visible, onClose }) {
     >
      <div style={{ textAlign: "center" }}>
         <img
-          src={activity.photoUrl}
+          src={imageSrc}
           alt="Activity"
           style={{
             width: "70%",
