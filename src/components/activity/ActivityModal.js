@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { Modal, Button } from "antd";
 import { useDispatch } from "react-redux";
 import { joinActivity } from "../../store/myActivitySlice";
+import { getImageByIdActivity } from "../../store/imageSlice";
 
 function ActivityModal({ activity, visible, onClose, isJoined }) {
   const dispatch = useDispatch();
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state for the button
+  const [imageSrc, setImageSrc] = useState('');
 
+  useEffect(() => {
+    if (activity && visible) {
+      const fetchImage = async () => {
+        const result = await dispatch(getImageByIdActivity({ id: activity.id }));
+        if (result.payload && result.payload.base64Image) {
+          setImageSrc(result.payload.base64Image);
+        }
+      };
+
+      fetchImage();
+    }
+  }, [activity, visible, dispatch]);
   if (!activity) {
     return null; // Render the modal if activity is not null
   }
@@ -35,20 +49,8 @@ function ActivityModal({ activity, visible, onClose, isJoined }) {
         footer={null}
       >
         <div style={{ textAlign: "center" }}>
-          <img
-            src={activity.photoUrl}
-            alt="Activity"
-            style={{
-              width: "70%",
-              margin: "0 auto",
-              objectFit: "cover",
-              objectPosition: "center",
-              maxHeight: "200px",
-              marginTop: "48px",
-              borderRadius: "25px",
-              boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
-            }}
-          />
+        <img src={imageSrc} alt="Announcement" style={{ maxWidth: "100%", height: "auto", marginTop : "25px"}} />
+
           <div style={{ textAlign: "left", marginLeft: "85px" }}>
             <div
               style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}

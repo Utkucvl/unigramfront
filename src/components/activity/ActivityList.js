@@ -34,7 +34,7 @@ function ActivityList() {
       try {
         const sources = {};
         await Promise.all(Activities.map(async (activity) => {
-          const result = await dispatch(getImageByIdActivity(activity)); 
+          const result = await dispatch(getImageByIdActivity(activity));
           sources[activity.id] = result.payload.base64Image;
         }));
         setImageSources(sources);
@@ -42,10 +42,10 @@ function ActivityList() {
         console.error("Error fetching images:", error);
       }
     };
-  
+
     fetchImages();
   }, [dispatch, Activities]);
-  
+
 
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
@@ -124,7 +124,7 @@ function ActivityList() {
                 hoverable
                 style={{
                   width: 240,
-                  height: 360,
+                  height: 400,
                   overflow: "hidden",
                   display: "flex",
                   flexDirection: "column",
@@ -133,7 +133,7 @@ function ActivityList() {
                 cover={
                   <img
                     alt="Activity"
-                    src={imageSources[activity.id]} 
+                    src={imageSources[activity.id]}
                     style={{
                       width: "100%",
                       height: "160px",
@@ -144,8 +144,9 @@ function ActivityList() {
                 onClick={() => handleActivityClick(activity)}
               >
                 <div style={{ padding: "" }}>
-                  <Card.Meta
+                  <Meta
                     title={activity.name}
+                    description={<span style={{ fontWeight: "bold" }}>{activity.clubName}</span>} 
                     style={{ marginBottom: "" }}
                   />
                   <p
@@ -182,6 +183,7 @@ function ActivityList() {
                   </div>
                 </div>
               </Card>
+
             );
           })}
         </div>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { Card, Input } from "antd"; // Input componentini import ettik
 import Meta from "antd/es/card/Meta";
 import PastActivityModal from "./PastActivityModal";
+import { getImageByIdActivity } from "../../store/imageSlice";
 
 
 
@@ -19,10 +20,27 @@ function PastActivity() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [searchTerm, setSearchTerm] = useState(""); // Arama terimini saklamak için state
+  const [imageSources, setImageSources] = useState({}); // New state to hold image sources
 
   useEffect(() => {
     dispatch(getPastActivities());
   }, [dispatch]);
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const sources = {};
+        await Promise.all(pastActivities.map(async (activity) => {
+          const result = await dispatch(getImageByIdActivity(activity));
+          sources[activity.id] = result.payload.base64Image;
+        }));
+        setImageSources(sources);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, [dispatch, pastActivities]);
 
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
@@ -60,11 +78,13 @@ function PastActivity() {
               key={activity.id}
               hoverable
               style={{ width: 240, height: 360, overflow: 'hidden', display: 'flex', flexDirection: 'column', marginBottom: "10" }}
-              cover={<img alt="announcement" src={activity.photoUrl} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />}
+              cover={<img alt="announcement" src={imageSources[activity.id]} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />}
               onClick={() => handleActivityClick(activity)}
             >
               <div style={{ padding: '' }}>
-                <Card.Meta title={activity.name} style={{ marginBottom: '' }} />
+                <Card.Meta title={activity.name} style={{ marginBottom: '' }}
+                  description={<span style={{ fontWeight: "bold" }}>{activity.clubName}</span>}
+                />
                 <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: '3', WebkitBoxOrient: 'vertical' }}>
                   {activity.content}
                 </p>
