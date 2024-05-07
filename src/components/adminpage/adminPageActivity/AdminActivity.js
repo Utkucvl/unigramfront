@@ -8,11 +8,10 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import {
-  getActivities,
+  getAllActivities,
   deleteActivity,
   updateActivity,
-  saveActivity,
-  changeActivity,
+  saveActivity
 } from "../../../store/activitySlice";
 import { getUsers } from "../../../store/userSlice";
 import { getClubs } from "../../../store/clubSlice";
@@ -22,7 +21,7 @@ import AdminActivityModal from "./AdminActivityModal"; // Detay modalını içer
 import alertify from "alertifyjs";
 import "alertifyjs/build/css/alertify.css";
 import { useNavigate } from "react-router-dom";
-import { current } from "@reduxjs/toolkit";
+
 
 const AdminActivity = () => {
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ const AdminActivity = () => {
 
   useEffect(() => {
     dispatch(getClubs());
-    dispatch(getActivities());
+    dispatch(getAllActivities());
     dispatch(getUsers());
   }, [dispatch]);
 
@@ -89,14 +88,22 @@ const AdminActivity = () => {
 
   const handleModalClose = () => {
     setModalVisible(false);
-    dispatch(getActivities());
+    dispatch(getAllActivities());
     form.resetFields();
   };
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      if (!values.date || !moment(values.date).isValid()) {
+      const selectedDate = moment(values.date);
+      const currentDate = moment();
+      
+      if (selectedDate.isBefore(currentDate, 'day')) {
+        alertify.error("You cannot select a date before today");
+        return;
+      }
+      
+      if (!selectedDate.isValid()) {
         alertify.error("Invalid date");
         return;
       }
@@ -122,10 +129,11 @@ const AdminActivity = () => {
       console.log("Failed:", errorInfo);
       alertify.error("Failed to process the request");
     } finally {
-      dispatch(getActivities());
+      dispatch(getAllActivities());
       handleModalClose();
     }
   };
+  
   
   const showActivityDetails = (activity) => {
     setSelectedActivityDetails(activity);

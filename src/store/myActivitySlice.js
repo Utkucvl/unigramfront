@@ -4,6 +4,7 @@ import axios from "../components/api/api";
 
 const initialState = {
   myActivities: [],
+  myPastActivities:[],
   loading: true,
   err: {},
 };
@@ -13,6 +14,19 @@ export const getMyActivities = createAsyncThunk(
     console.log(data.userId)
     try {
       const response = await axios.get("/activity/filter/"+data.userId);
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+export const getMyPastActivities = createAsyncThunk(
+  "/activity/getMyPastActivities",
+  async (data, thunkApi) => {
+    console.log(data.userId)
+    try {
+      const response = await axios.get("/activity/filterpast/"+data.userId);
       console.log(response.data)
       return response.data;
     } catch (error) {
@@ -72,6 +86,20 @@ export const myActivitySlice = createSlice({
       state.err = "Problem on getting Data.";
     });
 
+    builder.addCase(getMyPastActivities.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getMyPastActivities.fulfilled, (state, action) => {
+      state.myPastActivities = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+
+    builder.addCase(getMyPastActivities.rejected, (state, action) => {
+      state.loading = false;
+      state.err = "Problem on getting Data.";
+    });
     
 
     builder.addCase(joinActivity.pending, (state) => {

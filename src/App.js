@@ -17,6 +17,7 @@ import AdminActivity from "./components/adminpage/adminPageActivity/AdminActivit
 import UploadImage from "./components/adminpage/homePageOfAdmin/uploadImage";
 import UploadImageAnnouncement from "./components/adminpage/adminPageAnnouncement/uploadImageAnnouncement";
 import UploadImageActivity from "./components/adminpage/adminPageActivity/uploadImageActivity";
+import MyPastActivities from "./components/mypastactivity/MyPastActivity";
 
 const { Content } = Layout;
 
@@ -32,6 +33,7 @@ function LayoutWithNavbar({ children }) {
     "/admin",
     "/adminactivity",
     "/adminannouncement",
+    "/mypastactivities"
   ].includes(location.pathname);
 
   return (
@@ -68,6 +70,7 @@ function App() {
               path="/uploadImageActivity/:activityId"
               element={<UploadImageActivity />}
             />
+            <Route path="/mypastactivities" element={<MyPastActivities/>}></Route>
           </Routes>
         </LayoutWithNavbar>
       </BrowserRouter>

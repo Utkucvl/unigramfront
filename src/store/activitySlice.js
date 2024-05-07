@@ -52,6 +52,17 @@ export const getActivity = createAsyncThunk(
       }
     }
   );
+  export const getAllActivities = createAsyncThunk(
+    "/activity/getAllActivities",
+    async (_, thunkApi) => {
+      try {
+        const response = await axios.get("/activity/all");
+        return response.data;
+      } catch (error) {
+        return thunkApi.rejectWithValue(error.response?.data);
+      }
+    }
+  );
   export const saveActivity = createAsyncThunk(
     "/activity/saveActivity",
     async (data, thunkApi) => {
@@ -111,6 +122,20 @@ export const activitySlice = createSlice({
     });
 
     builder.addCase(getActivities.rejected, (state, action) => {
+      state.loading = false;
+      state.err = "Problem on getting Data.";
+    });
+    builder.addCase(getAllActivities.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getAllActivities.fulfilled, (state, action) => {
+      state.activities = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+
+    builder.addCase(getAllActivities.rejected, (state, action) => {
       state.loading = false;
       state.err = "Problem on getting Data.";
     });

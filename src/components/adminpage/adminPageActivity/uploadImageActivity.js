@@ -14,29 +14,39 @@ function UploadImageActivity() {
   const [msg, setMsg] = useState(null);
   const [base64Image, setBase64Image] = useState(null); // Yeni state tanımı
 
-  function handleUpload() {
-    if (!file) {
-      console.log("No File Selected");
-      return;
+    function handleUpload() {
+      if (!file) {
+        console.log("No File Selected");
+        return;
+      }
+    
+      // Dosya boyutunu kontrol et
+      const fileSizeInBytes = file.size;
+      console.log(fileSizeInBytes)
+      const maxSizeInBytes = 0.05 * 1024 * 1024; // 5 MB'lık maksimum boyut
+      if (fileSizeInBytes > maxSizeInBytes) {
+        console.log("File size exceeds the limit");
+        return;
+      }
+    
+      // Dosya boyutu uygunsa işlem devam eder
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setBase64Image(reader.result);
+      };
+      if (base64Image != null) {
+        console.log(base64Image);
+        dispatch(
+          saveImageActivity({ name: file.name, base64Image: base64Image, activityId: activityId })
+        );
+        navigate("/adminactivity");
+      }
+      reader.onerror = () => {
+        console.error("Error occurred while reading the file.");
+      };
     }
-
-    // Seçilen dosyayı oku
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      // Dosya okunduğunda base64 formatına çevir ve state'e ata
-      setBase64Image(reader.result);
-    };
-    if(base64Image !=null){
-      console.log(base64Image)
-      dispatch(saveImageActivity({name:file.name,base64Image:base64Image,activityId:activityId}))
-      navigate("/adminactivity")
-    }
-    reader.onerror = () => {
-      console.error("Error occurred while reading the file.");
-    };
-  }
-
+    
 
   return (
     <div className="App">

@@ -67,16 +67,22 @@ const TopMenu = () => {
         <Link to="/activities" className="nav-link">Activities</Link>
         <Link to="/announcement" className="nav-link">Announcements</Link>
         <Link to="/pastactivity" className="nav-link">Past Activities</Link>
-
+        
+        {isLoggedIn ? (
+          <Link to="/mypastactivities" className="nav-link">My Past Activities</Link>
+        ) : (
+          <Link to="/signin" className="nav-link">My Past Activities</Link>
+        )}
         {isLoggedIn ? (
           <Link to="/myactivities" className="nav-link">My Activities</Link>
         ) : (
           <Link to="/signin" className="nav-link">My Activities</Link>
         )}
+         
         {isLoggedIn ? (
-          <span className="nav-link" onClick={showModal}>Log Out</span>
+          <span className="nav-link" onClick={showModal} style={{marginLeft:"410px"}}>Log Out</span>
         ) : (
-          <Link to="/signin" className="nav-link">Log In</Link>
+          <Link to="/signin" className="nav-link" style={{marginLeft:"410px"}}>Log In</Link>
         )}
       </div>
       <Modal

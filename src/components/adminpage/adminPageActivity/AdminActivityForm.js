@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Form, Input, DatePicker, Select } from 'antd';
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -20,6 +21,7 @@ const AdminActivityForm = ({ form, clubs, isUpdateMode, selectedActivity }) => {
             <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please input the date!' }]}>
                 <DatePicker
                     style={{ width: '100%' }}
+                    disabledDate={current => current && current < moment().startOf('day')}
                     placeholder="Select date for the activity"
                 />
             </Form.Item>
