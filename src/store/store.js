@@ -5,7 +5,8 @@ import activitySlice from "./activitySlice";
 import myActivitySlice from "./myActivitySlice";
 import clubSlice from "./clubSlice";
 import userSlice from "./userSlice";
-import imageSlice from "./imageSlice"
+import imageSlice from "./imageSlice";
+import myClubSlice from "./myClubSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     myActivity:myActivitySlice,
     club:clubSlice,
     user:userSlice,
-    image:imageSlice
+    image:imageSlice,
+    myClub:myClubSlice
 
   },
 });

@@ -81,25 +81,26 @@ export const saveImageAnnouncement = createAsyncThunk(
     }
   }
 );
+
+export const saveImageClub = createAsyncThunk(
+  'image/saveImageClub',
+  async (data, thunkApi) => {
+    try {
+      const { clubId, ...imageData } = data;
+      const response = await axios.post(`/baseimage/club/${clubId}`, imageData);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to save image for club:", error.response?.data);
+      throw error;
+    }
+  }
+);
 export const saveImageActivity = createAsyncThunk(
   "/image/saveImageActivity",
   async (data, thunkApi) => {
     try {
       console.log(data)
       const response = await axios.post("/baseimage/activity/"+data.activityId,data);
-      return response.data;
-    } catch (error) {
-      console.error("Failed to save activity:", error.response?.data);
-      throw error;
-    }
-  }
-);
-export const saveImageClub = createAsyncThunk(
-  "/image/saveImageClub",
-  async (data, thunkApi) => {
-    try {
-      console.log(data)
-      const response = await axios.post("/baseimage/club/"+data.clubI,data);
       return response.data;
     } catch (error) {
       console.error("Failed to save activity:", error.response?.data);

@@ -146,7 +146,7 @@ function ActivityList() {
                 <div style={{ padding: "" }}>
                   <Meta
                     title={activity.name}
-                    description={<span style={{ fontWeight: "bold" }}>{activity.clubName}</span>} 
+                    description={<span style={{ fontWeight: "bold" }}>{activity.clubName}</span>}
                     style={{ marginBottom: "" }}
                   />
                   <p

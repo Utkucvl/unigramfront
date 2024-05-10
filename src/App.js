@@ -18,6 +18,10 @@ import UploadImage from "./components/adminpage/homePageOfAdmin/uploadImage";
 import UploadImageAnnouncement from "./components/adminpage/adminPageAnnouncement/uploadImageAnnouncement";
 import UploadImageActivity from "./components/adminpage/adminPageActivity/uploadImageActivity";
 import MyPastActivities from "./components/mypastactivity/MyPastActivity";
+import ClubList from "./components/clubs/ClubList";
+import MyClub from "./components/myclubs/MyClub";
+import UploadImageClub from "./components/adminpage/adminPageClubs/uploadImageClub";
+import AdminClubs from "./components/adminpage/adminPageClubs/AdminClubs";
 
 const { Content } = Layout;
 
@@ -33,7 +37,11 @@ function LayoutWithNavbar({ children }) {
     "/admin",
     "/adminactivity",
     "/adminannouncement",
-    "/mypastactivities"
+    "/mypastactivities",
+    "/clubs",
+    "/myclub",
+    "/adminclub"
+  
   ].includes(location.pathname);
 
   return (
@@ -58,7 +66,15 @@ function App() {
             <Route path="/myactivities" element={<MyActivities />} />
             <Route path="/notmyactivity" element={<NotMyActivity />} />
             <Route path="/pastactivity" element={<PastActivity />} />
+            <Route path="/clubs" element={<ClubList />} />
+            <Route path="/myclub" element={<MyClub />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/adminclub" element={<AdminClubs />} />
+            <Route
+              path="/uploadImageClub/:clubId"
+              element={<UploadImageClub />}
+            />
+
             <Route path="/adminactivity" element={<AdminActivity />} />
             <Route path="/adminannouncement" element={<AdminAnnouncement />} />
             <Route path="/uploadImage" element={<UploadImage />} />
@@ -77,5 +93,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

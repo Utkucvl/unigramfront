@@ -17,7 +17,7 @@ import { getUsers } from "../../../store/userSlice";
 import { getClubs } from "../../../store/clubSlice";
 import moment from "moment";
 import AdminActivityForm from "./AdminActivityForm";
-import AdminActivityModal from "./AdminActivityModal"; // Detay modalını içeren bileşen
+import AdminActivityModal from "./AdminActivityModal"; 
 import alertify from "alertifyjs";
 import "alertifyjs/build/css/alertify.css";
 import { useNavigate } from "react-router-dom";
@@ -271,7 +271,7 @@ const AdminActivity = () => {
         />
       </Table>
 
-      <Modal
+      <Modal  
         title={isUpdateMode ? "Update Activity" : "Add New Activity"}
         visible={modalVisible}
         onOk={handleSubmit}

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'antd';
 import { useDispatch } from "react-redux";
-import { quitActivity } from '../../store/myActivitySlice';
-import { getImageByIdActivity } from "../../store/imageSlice";
+import { leaveClub } from "../../store/myClubSlice";
+import { getImageByIdClub } from "../../store/imageSlice";
 
-function MyActivityModal({ myActivity, visible, onClose }) {
+function MyClubModal({ club, visible, onClose }) {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (myActivity && visible) {
+    if (club && visible) {
       const fetchImage = async () => {
-        const result = await dispatch(getImageByIdActivity({ id: myActivity.id }));
+        const result = await dispatch(getImageByIdClub({ id: club.id }));
         if (result.payload && result.payload.base64Image) {
           setImageSrc(result.payload.base64Image);
         }
@@ -21,25 +21,24 @@ function MyActivityModal({ myActivity, visible, onClose }) {
 
       fetchImage();
     }
-  }, [myActivity, visible, dispatch]);
+  }, [club, visible, dispatch]);
 
-  if (!myActivity) {
+  if (!club) {
     return null;
   }
 
-  const handleQuit = async (activityId, userId) => {
+  const handleQuit = async (clubId, userId) => {
     setLoading(true); 
     try {
-      await dispatch(quitActivity({ userId: userId, activityId: activityId }));
+      await dispatch(leaveClub({ userId: userId, clubId: clubId }));
       setConfirmVisible(false); 
       onClose(); 
     } catch (error) {
-      console.error("Error quitting activity:", error);
+      console.error("Error quitting club:", error);
     } finally {
       setLoading(false); 
     }
   };
- 
 
   const handleCancelConfirm = () => {
     setConfirmVisible(false); 
@@ -49,7 +48,7 @@ function MyActivityModal({ myActivity, visible, onClose }) {
   return (
     <>
       <Modal
-        title={myActivity.title}
+        title={club.name}
         visible={visible}
         onCancel={onClose}
         footer={null}
@@ -57,7 +56,7 @@ function MyActivityModal({ myActivity, visible, onClose }) {
         <div style={{ textAlign: "center" }}>
           <img
             src={imageSrc}
-            alt="Activity"
+            alt="Club"
             style={{
               width: "70%",
               margin: "0 auto",
@@ -71,35 +70,26 @@ function MyActivityModal({ myActivity, visible, onClose }) {
           />
           <div style={{ textAlign: "left", marginLeft: "85px" }}>
             <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Activity Name:</span>{" "}
+              <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
               <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {myActivity.name}
+                {club.content}
               </span>
+              <h3 style={{ fontSize: "18px", marginLeft: "5px" }}>
+                Communication: {club.communication}
+              </h3>
             </div>
             <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Content:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {myActivity.content}
-              </span>
+              <span style={{ fontWeight: "bold" }}>Activities:</span>{" "}
+              {club.activities.map(activity => (
+                <div key={activity.id}>
+                  <p>{activity.name}</p>
+                  <p>{activity.place}</p>
+                  <p>{activity.date}</p>
+                  <p>{activity.content}</p>
+                </div>
+              ))}
             </div>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Place Of Activity:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {myActivity.place}
-              </span>
-            </div>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Date Of Activity:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {String(myActivity.date)}
-              </span>
-            </div>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Organizer Club:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {myActivity.clubName}
-              </span>
-            </div>
+          
           </div>
         </div>
         <div style={{ textAlign: "center", marginTop: "20px" }}>
@@ -109,21 +99,21 @@ function MyActivityModal({ myActivity, visible, onClose }) {
             onClick={() => setConfirmVisible(true)}
             loading={loading} 
           >
-            Quit This Activity
+            Quit This Club
           </Button>
         </div>
       </Modal>
 
       <Modal
-        title="Quit Activity"
+        title="Quit Club"
         visible={confirmVisible}
         onCancel={handleCancelConfirm}
-        onOk={() => handleQuit(myActivity.id, localStorage.getItem("userId"))}
+        onOk={() => handleQuit(club.id, localStorage.getItem("userId"))}
       >
-        <p>Are you sure you want to quit this activity?</p>
+        <p>Are you sure you want to quit this club?</p>
       </Modal>
     </>
   );
 }
 
-export default MyActivityModal;
+export default MyClubModal;

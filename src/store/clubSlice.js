@@ -1,27 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../components/api/api";
-import { changeActivity } from "./activitySlice";
-
 
 const initialState = {
   clubs: [],
-  club: {},
-  currentClub: {},
   loading: true,
-  err: {},
+  err: null,
 };
-export const changeClub = createAsyncThunk(
-  "/club/changeClub",
-  async (data, thunkApi) => {
+
+export const deleteClub = createAsyncThunk(
+  "club/deleteClub",
+  async (clubId, thunkApi) => {
     try {
-      return data;
+      await axios.delete(`/club/${clubId}`);
+      return clubId;
     } catch (error) {
-      return thunkApi.rejectWithValue(data);
+      return thunkApi.rejectWithValue(error.response?.data);
     }
   }
 );
+
 export const getClubs = createAsyncThunk(
-  "/club/getClubs",
+  "club/getClubs",
   async (_, thunkApi) => {
     try {
       const response = await axios.get("/club");
@@ -32,32 +31,80 @@ export const getClubs = createAsyncThunk(
   }
 );
 
+export const createClub = createAsyncThunk(
+  "club/createClub",
+  async (clubData, thunkApi) => {
+    try {
+      const response = await axios.post("/club", clubData);
+      console.log(response.data); 
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data); 
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const updateClub = createAsyncThunk(
+  "club/updateClub",
+  async ({ id, ...clubData }, thunkApi) => {
+    try {
+      console.log(`Sending PUT request to /club/${id} with data:`, clubData);
+      const response = await axios.put(`/club/${id}`, clubData);
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.error("Failed to update club:", error.message);
+      return thunkApi.rejectWithValue(error.response?.data || 'Update failed');
+    }
+  }
+);
 
 export const clubSlice = createSlice({
   name: "club",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(changeClub.fulfilled, (state, action) => {
-      state.changeClub= action.payload;
-    });
-
-    builder.addCase(getClubs.pending, (state) => {
-      state.loading = true;
-    });
-
-    builder.addCase(getClubs.fulfilled, (state, action) => {
-      state.clubs = action.payload;
-      state.loading = false;
-      state.err = "";
-    });
-
-    builder.addCase(getClubs.rejected, (state, action) => {
-      state.loading = false;
-      state.err = "Problem on getting Data.";
-    });
-    
-
+    builder
+      .addCase(getClubs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getClubs.fulfilled, (state, action) => {
+        state.clubs = action.payload;
+        state.loading = false;
+        state.err = null;
+      })
+      .addCase(getClubs.rejected, (state, action) => {
+        state.loading = false;
+        state.err = "Problem getting data.";
+      })
+      .addCase(deleteClub.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteClub.fulfilled, (state, action) => {
+        const deletedClubId = action.payload;
+        state.clubs = state.clubs.filter((club) => club.id !== deletedClubId);
+        state.loading = false;
+        state.err = null;
+      })
+      .addCase(deleteClub.rejected, (state, action) => {
+        state.loading = false;
+        state.err = "Failed to delete club.";
+      })
+      .addCase(createClub.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createClub.fulfilled, (state, action) => {
+        state.clubs.push(action.payload);
+        state.loading = false;
+        state.err = null;
+      })
+      .addCase(createClub.rejected, (state, action) => {
+        state.loading = false;
+        state.err = "Failed to create club.";
+      })
+      
+      
   },
 });
 

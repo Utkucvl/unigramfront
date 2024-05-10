@@ -40,6 +40,8 @@ const TopMenu = () => {
         <div className="nav-menu">
           <Link to="/adminactivity" className="nav-link">Activities</Link>
           <Link to="/adminannouncement" className="nav-link">Announcements</Link>
+          <Link to="/adminclub" className="nav-link">Clubs</Link>
+
           <span className="nav-link" onClick={showModal}>Log Out</span>
         </div>
         <Modal
@@ -56,6 +58,7 @@ const TopMenu = () => {
     );
   }
   // For USER, render the full navigation
+  
   return (
     <div className="navbar">
       <div className="nav-logo">
@@ -73,11 +76,15 @@ const TopMenu = () => {
         ) : (
           <Link to="/signin" className="nav-link">My Past Activities</Link>
         )}
+        
         {isLoggedIn ? (
           <Link to="/myactivities" className="nav-link">My Activities</Link>
         ) : (
           <Link to="/signin" className="nav-link">My Activities</Link>
         )}
+        <Link to="/clubs" className="nav-link">Clubs</Link>
+        <Link to="/myclub" className="nav-link">My Clubs</Link>
+
          
         {isLoggedIn ? (
           <span className="nav-link" onClick={showModal} style={{marginLeft:"410px"}}>Log Out</span>
