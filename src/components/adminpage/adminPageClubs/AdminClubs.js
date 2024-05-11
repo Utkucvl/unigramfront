@@ -100,7 +100,7 @@ const AdminClubs = () => {
       const payload = {
         ...values,
         id: selectedClub?.id,
-        activities: selectedClub.activities
+        activities: isUpdateMode ? selectedClub.activities : []
       };
       console.log(payload.id)
       const action = isUpdateMode ? updateClub : createClub;
@@ -180,7 +180,7 @@ const AdminClubs = () => {
 
 
         <Table.Column
-          title="Clubs"
+          title="Actions"
           key="clubs"
           render={(text, club) => (
             <Space size="middle">

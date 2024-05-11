@@ -30,6 +30,18 @@ export const getClubs = createAsyncThunk(
     }
   }
 );
+export const getClub = createAsyncThunk(
+  "club/getClub",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.get("/club/"+data.id);
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 export const createClub = createAsyncThunk(
   "club/createClub",
@@ -75,6 +87,18 @@ export const clubSlice = createSlice({
         state.err = null;
       })
       .addCase(getClubs.rejected, (state, action) => {
+        state.loading = false;
+        state.err = "Problem getting data.";
+      })
+      .addCase(getClub.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getClub.fulfilled, (state, action) => {
+        state.club = action.payload;
+        state.loading = false;
+        state.err = null;
+      })
+      .addCase(getClub.rejected, (state, action) => {
         state.loading = false;
         state.err = "Problem getting data.";
       })

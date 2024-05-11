@@ -3,12 +3,14 @@ import { Modal, Button } from 'antd';
 import { useDispatch } from "react-redux";
 import { leaveClub } from "../../store/myClubSlice";
 import { getImageByIdClub } from "../../store/imageSlice";
+import { useNavigate } from 'react-router-dom';
 
 function MyClubModal({ club, visible, onClose }) {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (club && visible) {
@@ -102,6 +104,15 @@ function MyClubModal({ club, visible, onClose }) {
             Quit This Club
           </Button>
         </div>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <Button
+              type="primary"
+              onClick={() => {navigate("/activitylist/"+club.id)}}
+              loading={loading}
+            >
+              Go To This Club's Activities
+            </Button>
+          </div>
       </Modal>
 
       <Modal

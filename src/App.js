@@ -22,6 +22,7 @@ import ClubList from "./components/clubs/ClubList";
 import MyClub from "./components/myclubs/MyClub";
 import UploadImageClub from "./components/adminpage/adminPageClubs/uploadImageClub";
 import AdminClubs from "./components/adminpage/adminPageClubs/AdminClubs";
+import ActivityListForClub from "./components/activity/ActivityListForClub"
 
 const { Content } = Layout;
 
@@ -40,7 +41,8 @@ function LayoutWithNavbar({ children }) {
     "/mypastactivities",
     "/clubs",
     "/myclub",
-    "/adminclub"
+    "/adminclub",
+    "/activitylist/:clubId"
   
   ].includes(location.pathname);
 
@@ -73,6 +75,10 @@ function App() {
             <Route
               path="/uploadImageClub/:clubId"
               element={<UploadImageClub />}
+            />
+            <Route
+              path="/activitylist/:clubId"
+              element={<ActivityListForClub />}
             />
 
             <Route path="/adminactivity" element={<AdminActivity />} />

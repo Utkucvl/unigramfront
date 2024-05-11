@@ -30,6 +30,18 @@ export const getActivities = createAsyncThunk(
     }
   }
 );
+export const getActivitiesByClubId = createAsyncThunk(
+  "/activity/getActivitiesByClubId",
+  async (data, thunkApi) => {
+    try {
+      const response = await axios.get("/activity/byclub/"+data.id);
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
 export const getPastActivities = createAsyncThunk(
   "/activity/getPastActivities",
   async (_, thunkApi) => {
@@ -122,6 +134,20 @@ export const activitySlice = createSlice({
     });
 
     builder.addCase(getActivities.rejected, (state, action) => {
+      state.loading = false;
+      state.err = "Problem on getting Data.";
+    });
+    builder.addCase(getActivitiesByClubId.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getActivitiesByClubId.fulfilled, (state, action) => {
+      state.activities = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+
+    builder.addCase(getActivitiesByClubId.rejected, (state, action) => {
       state.loading = false;
       state.err = "Problem on getting Data.";
     });
