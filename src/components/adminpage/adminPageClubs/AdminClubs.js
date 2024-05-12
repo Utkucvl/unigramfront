@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   PlusSquareOutlined,
   InfoCircleOutlined,
+  DesktopOutlined,
 } from "@ant-design/icons";
 import {
   getClubs,
@@ -195,6 +196,10 @@ const AdminClubs = () => {
               <Button
                 icon={<InfoCircleOutlined />}
                 onClick={() => showClubDetails(club)}
+              />
+              <Button
+                icon={<DesktopOutlined />}
+                onClick={() =>{navigate("/adminactivity/"+club.id)}}
               />
             </Space>
           )}

@@ -23,6 +23,7 @@ import MyClub from "./components/myclubs/MyClub";
 import UploadImageClub from "./components/adminpage/adminPageClubs/uploadImageClub";
 import AdminClubs from "./components/adminpage/adminPageClubs/AdminClubs";
 import ActivityListForClub from "./components/activity/ActivityListForClub"
+import AdminActivityForClub from "./components/adminpage/adminPageActivity/AdminActivityForClub";
 
 const { Content } = Layout;
 
@@ -79,6 +80,10 @@ function App() {
             <Route
               path="/activitylist/:clubId"
               element={<ActivityListForClub />}
+            />
+            <Route
+              path="/adminactivity/:clubId"
+              element={<AdminActivityForClub />}
             />
 
             <Route path="/adminactivity" element={<AdminActivity />} />
