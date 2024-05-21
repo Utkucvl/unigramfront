@@ -58,16 +58,7 @@ function MyActivityModal({ myActivity, visible, onClose }) {
           <img
             src={imageSrc}
             alt="Activity"
-            style={{
-              width: "70%",
-              margin: "0 auto",
-              objectFit: "cover",
-              objectPosition: "center",
-              maxHeight: "200px",
-              marginTop: "48px",
-              borderRadius: "25px",
-              boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
-            }}
+            style={{ maxWidth: "100%", height: "auto" }}
           />
           <div style={{ textAlign: "left", marginLeft: "85px" }}>
             <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>

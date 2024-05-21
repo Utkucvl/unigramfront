@@ -29,7 +29,7 @@ const { Content } = Layout;
 
 function LayoutWithNavbar({ children }) {
   const location = useLocation();
-  const showNavbar = [
+  let showNavbar = [
     "/announcement",
     "/activities",
     "/",
@@ -43,16 +43,20 @@ function LayoutWithNavbar({ children }) {
     "/clubs",
     "/myclub",
     "/adminclub",
-    "/activitylist/:clubId"
-  
-  ].includes(location.pathname);
+  ].some(path => location.pathname.startsWith(path));
 
+  if (location.pathname.startsWith("/activitylist/")) {
+    showNavbar = true;
+  }
+  if(location.pathname.startsWith("/signin") || location.pathname.startsWith("/signup")){
+    showNavbar = false;
+  }
   return (
     <Layout>
       {showNavbar && <Navbar />}
       <Content style={{ padding: "0 50px" }}>{children}</Content>
     </Layout>
-  );
+  );
 }
 
 function App() {

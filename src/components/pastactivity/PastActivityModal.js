@@ -34,16 +34,7 @@ function PastActivityModal({ activity, visible, onClose }) {
         <img
           src={imageSrc}
           alt="Activity"
-          style={{
-            width: "70%",
-            margin: "0 auto",
-            objectFit: "cover", // Görüntüyü tamamen kaplayacak şekilde boyutlandırma
-            objectPosition: "center", // Görüntüyü ortalamak için
-            maxHeight: "200px", // Maksimum yükseklik 210 piksel olacak
-            marginTop: "48px",
-            borderRadius: "25px",
-            boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
-          }}
+          style={{ maxWidth: "100%", height: "auto" }}
         />
         <div style={{ textAlign: "left", marginLeft: "85px" }}>
           <div

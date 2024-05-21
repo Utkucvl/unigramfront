@@ -10,7 +10,7 @@ function MyClubModal({ club, visible, onClose }) {
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (club && visible) {
@@ -30,89 +30,58 @@ function MyClubModal({ club, visible, onClose }) {
   }
 
   const handleQuit = async (clubId, userId) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       await dispatch(leaveClub({ userId: userId, clubId: clubId }));
-      setConfirmVisible(false); 
-      onClose(); 
+      setConfirmVisible(false);
+      onClose();
     } catch (error) {
       console.error("Error quitting club:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const handleCancelConfirm = () => {
-    setConfirmVisible(false); 
+    setConfirmVisible(false);
     onClose();
   };
 
   return (
+    
     <>
       <Modal
-        title={club.name}
         visible={visible}
         onCancel={onClose}
         footer={null}
+        style={{ textAlign: "center" }}
       >
-        <div style={{ textAlign: "center" }}>
-          <img
-            src={imageSrc}
-            alt="Club"
-            style={{
-              width: "70%",
-              margin: "0 auto",
-              objectFit: "cover",
-              objectPosition: "center",
-              maxHeight: "200px",
-              marginTop: "48px",
-              borderRadius: "25px",
-              boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.5)",
-            }}
-          />
-          <div style={{ textAlign: "left", marginLeft: "85px" }}>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {club.content}
-              </span>
-              <h3 style={{ fontSize: "18px", marginLeft: "5px" }}>
-                Communication: {club.communication}
-              </h3>
-            </div>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Activities:</span>{" "}
-              {club.activities.map(activity => (
-                <div key={activity.id}>
-                  <p>{activity.name}</p>
-                  <p>{activity.place}</p>
-                  <p>{activity.date}</p>
-                  <p>{activity.content}</p>
-                </div>
-              ))}
-            </div>
-          
-          </div>
+        <img
+          src={imageSrc}
+          alt="Club"
+          style={{ maxWidth: "90%", height: "auto", marginTop: "20px" }}
+        />
+        <div style={{ marginTop: "20px", fontSize: "18px" }}>
+        <p><strong>Club Name:</strong> {club.name}</p>
+          <p><strong>Description:</strong> {club.content}</p>
+          <p><strong>Communication:</strong> {club.communication}</p>
         </div>
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Button
-            type="primary"
-            style={{ backgroundColor: "red" }}
-            onClick={() => setConfirmVisible(true)}
-            loading={loading} 
-          >
-            Quit This Club
-          </Button>
-        </div>
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <Button
-              type="primary"
-              onClick={() => {navigate("/activitylist/"+club.id)}}
-              loading={loading}
-            >
-              Go To This Club's Activities
-            </Button>
-          </div>
+        <Button
+          type="primary"
+          style={{ marginTop: "20px", backgroundColor: "red", width: "75%" }}
+          onClick={() => setConfirmVisible(true)}
+          loading={loading}
+        >
+          Quit This Club
+        </Button>
+        <Button
+          type="primary"
+          style={{ marginTop: "10px", width: "75%" }}
+          onClick={() => navigate("/activitylist/" + club.id)}
+          loading={loading}
+        >
+          Go To This Club's Activities
+        </Button>
       </Modal>
 
       <Modal

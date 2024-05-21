@@ -61,73 +61,43 @@ function ClubModal({ club, visible, onClose, isJoined }) {
         visible={visible}
         onCancel={onClose}
         footer={null}
+        style={{ textAlign: "center" }} 
       >
-        <div style={{ textAlign: "center" }}>
-          <img src={imageSrc} alt="Club" style={{ maxWidth: "100%", height: "auto", marginTop : "25px"}} />
-
-          <div style={{ textAlign: "left", marginLeft: "85px" }}>
-            <div
-              style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}
-            >
-              <span style={{ fontWeight: "bold" }}>Club Name:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {club.name}
-              </span>
-            </div>
-            <div
-              style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}
-            >
-              <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
-              <span style={{ fontSize: "18px", marginLeft: "5px" }}>
-                {club.content}
-              </span>
-              <h3 style={{ fontSize: "18px", marginLeft: "5px" }}>
-                Communication: {club.communication}
-              </h3>
-            </div>
-            <div style={{ margin: "20px", fontFamily: "italic", fontSize: "18px" }}>
-              <span style={{ fontWeight: "bold" }}>Activities:</span>{" "}
-              {club.activities.map(activity => (
-                <div key={activity.id}>
-                  <p>{activity.name}</p>
-                  <p>{activity.place}</p>
-                  <p>{activity.date}</p>
-                  <p>{activity.content}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        <img src={imageSrc} alt="Club" style={{ maxWidth: "90%", height: "auto", marginTop: "20px" }} />
+        <div style={{ marginTop: "20px", fontSize: "18px" }}>
+           <p><strong>Club Name:</strong> {club.name}</p>
+           <p><strong>Description:</strong> {club.content}</p>
+          <p><strong>Communication:</strong> {club.communication}</p>
         </div>
-        {isJoined ? (
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <div style={{ marginTop: "20px" }}>
+          {isJoined ? (
             <Button
               type="primary"
               onClick={() => handleLeave(club.id, localStorage.getItem("userId"))}
               loading={loading}
+              style={{ width: "75%" }}
             >
               Leave This Club
             </Button>
-          </div>
-        ) : (
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
+          ) : (
             <Button
               type="primary"
               onClick={() => setConfirmVisible(true)}
               loading={loading}
+              style={{ width: "75%" }}
             >
               Join This Club
             </Button>
-          </div>
-        )}
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <Button
-              type="primary"
-              onClick={() => {navigate("/activitylist/"+club.id)}}
-              loading={loading}
-            >
-              Go To This Club's Activities
-            </Button>
-          </div>
+          )}
+          <Button
+            type="primary"
+            onClick={() => navigate("/activitylist/" + club.id)}
+            loading={loading}
+            style={{ width: "75%", marginTop: "10px",  }} 
+          >
+            Go To This Club's Activities
+          </Button>
+        </div>
       </Modal>
 
       <Modal

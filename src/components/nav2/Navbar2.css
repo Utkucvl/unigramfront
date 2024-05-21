@@ -25,9 +25,7 @@
     list-style: none;
     margin: 0 20px; /* Menüyü logodan ve diğer içerikten ayrı tutar */
   }
-  .nav-menu .nav-link:nth-child(7) {
-    margin-right: auto; /* Üçüncü linki (Activities) sola yasla */
-  }
+  
   
   .nav-link {
     padding: 10px 15px;
